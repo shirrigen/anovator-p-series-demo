@@ -252,3 +252,4 @@
 
 .pose-capture, .pose-public-specimen { object-fit: cover !important; object-position: 7% 50%; }
 .pose-field[data-view="side"] .pose-capture, .pose-public-specimen[data-view="side"] { object-position: 91% 50%; }
+.pose-result-art[data-view="side"] .pose-result-veil { left: 70px; width: 38px; }
