@@ -252,12 +252,12 @@
   root.ANOVATOR_ENTRY_UI = {
     ...entry,
     render(state, controls) {
-      const identity = state.identityDraft ?? state.user?.id ?? state.reviewIdentity ?? '';
+      const identity = state.identityDraft ?? (controls.demo ? '' : state.user?.id ?? state.reviewIdentity ?? '');
       const template = fragment(entry.render({ ...state, identityDraft: identity }, controls));
       at('[data-member-key="backspace"]', template.content).innerHTML = '<img src="' + assets + 'backspace.svg" alt="">';
       const field = at('#member-id', template.content);
       field.removeAttribute('style');
-      field.maxLength = 12;
+      if (!controls.demo) field.maxLength = 12;
       const [back, forward] = template.content.querySelectorAll('.entry-actions button');
       back.insertAdjacentHTML('afterbegin', '<img src="' + chrome + 'back.svg" alt="">');
       forward.innerHTML = '<span><img src="' + chrome + 'next.svg" alt="">Continue</span>';
@@ -790,7 +790,7 @@
     const note = root.ANOVATOR_PAGES_RELEASE ? null : at('.screen-note', app);
     if (note) {
       note.textContent = route === 'standby' || route === 'identity'
-        ? 'Use member ID 246810 to try the demo.'
+        ? 'Enter a member ID to try the demo.'
         : 'Demo session with sample readings.';
       const options = at('.entry-options', main);
       if (options) note.after(options);

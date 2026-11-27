@@ -194,8 +194,8 @@
    chooseGuide,sync,video:()=>document.querySelector('.body-measure-media video')
  };
 
- function renderIdentity(s,{b,n,esc,recentAccounts,demoId}){
-   const initial=demoId||s.user?.id||s.reviewIdentity||'DEMO-001';
+ function renderIdentity(s,{b,n,esc,recentAccounts,demo=false}){
+   const initial=demo?'':s.user?.id||s.reviewIdentity||'DEMO-001';
    const id=s.identityDraft??initial;
    const keys=['1','2','3','4','5','6','7','8','9','backspace','0'].map(key=>
      '<button type="button" data-member-key="'+key+'" aria-label="'+(key==='backspace'?'Delete digit':key)+'">'+
@@ -203,13 +203,14 @@
    const back=s.identityOrigin?b('Back','cancel-identity-edit'):n('Back','standby');
    return '<section class="entry-screen" lang="en" aria-label="Member ID entry">'+
      '<img class="entry-mo" src="assets/entry-ui/member-id-mo.png" alt="">'+
-     '<div class="entry-intro"><p>BEFORE WE BEGIN</p><h1>Enter your<br>member ID.</h1></div>'+
+     '<div class="entry-intro"><p>BEFORE WE BEGIN</p><h1>'+(demo?'Enter any<br>number.':'Enter your<br>member ID.')+'</h1></div>'+
      '<form data-form="identity" class="entry-form"><label class="entry-field" for="member-id">Member ID'+
-     '<input id="member-id" name="id" type="text" value="'+esc(id)+'" inputmode="numeric" autocomplete="off" spellcheck="false" required></label>'+
+     '<input id="member-id" name="id" type="text" value="'+esc(id)+'" inputmode="numeric" autocomplete="off" spellcheck="false" required'+
+     (demo?' pattern="[0-9]+" title="Enter any digits to continue."':'')+'></label>'+
      '<input type="hidden" name="name" value="'+esc(s.user?.name||'演示受测者')+'">'+
      '<div class="entry-keypad" role="group" aria-label="Number keypad">'+keys+'</div>'+
      '<div class="entry-actions">'+back+'<button type="submit" class="primary">Continue</button></div></form>'+
-     (demoId?'':'<details class="entry-options"><summary>More login options</summary>'+recentAccounts()+
+     (demo?'':'<details class="entry-options"><summary>More login options</summary>'+recentAccounts()+
      b('Scan to sign in (demo)','identity',{id:'DEMO-QR-001',name:'扫码演示受测者'})+'</details>')+'</section>';
  }
 

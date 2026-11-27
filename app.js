@@ -3,7 +3,6 @@
 const C=ANOVATOR_CATALOG,P=ANOVATOR_PAGES,E=ANOVATOR_ENGINE,H=ANOVATOR_HEIGHT,W=ANOVATOR_WEIGHT,ACCOUNT_K='anovator-g01-v04-accounts',FEEDBACK_K='anovator-g01-v04-feedback';
 const params=typeof location==='undefined'?null:new URLSearchParams(location.search);
 const pagesRelease=window.ANOVATOR_PAGES_RELEASE===true;
-const publicDemoId='246810';
 const scenario=pagesRelease?null:params?.get('scenario');
 const routeReview=window.ANOVATOR_ROUTE_REVIEW===true,h10Footer=!!window.ANOVATOR_FOOTER_H10;
 const directNavigation=routeReview&&h10Footer&&(pagesRelease||params?.get('navigation')==='direct');
@@ -854,7 +853,7 @@ function renderRoute(){
  case 'group-prepare':case 'group-measure':case 'group-result':return groupPage();
  case 'standby':return `<div class="splash"><div class="mark">ANOVATOR</div><h1>了解身体，<br>从这里开始。</h1><p class="muted">${singleBody()?'人体成分分析':active().length+' 项身体测量'}</p>${b(singleBody()?'开始测量':'开始体验','start',{},'primary')}</div>`+reviewNote('这是全局功能原型。当前画面用于评审功能与去向，正式视觉和动效沿各工作线继续。');
  case 'home':case 'results':return sessionOverview();
- case 'identity':return (ENTRY?ENTRY.render(state,{b,n,esc,recentAccounts,demoId:pagesRelease?publicDemoId:null}):title('登录','登录后，将测量结果保存到你的账号。')+form('identity',field('id','会员编号',state.user?.id||state.reviewIdentity||'DEMO-001','text','autocomplete="off" required')+field('name','姓名',state.user?.name||'演示受测者'),'继续')+recentAccounts()+(state.identityOrigin?b('取消修改','cancel-identity-edit'):!state.user?n('返回待机','standby'):'')+b('扫码登录（演示）','identity',{id:'DEMO-QR-001',name:'扫码演示受测者'}))+(pagesRelease?'':reviewNote('ID长度、是否允许匿名，以及“无匹配→登记”的规则仍待确认；不会假设必须是手机号。'));
+ case 'identity':return (ENTRY?ENTRY.render(state,{b,n,esc,recentAccounts,demo:pagesRelease}):title('登录','登录后，将测量结果保存到你的账号。')+form('identity',field('id','会员编号',state.user?.id||state.reviewIdentity||'DEMO-001','text','autocomplete="off" required')+field('name','姓名',state.user?.name||'演示受测者'),'继续')+recentAccounts()+(state.identityOrigin?b('取消修改','cancel-identity-edit'):!state.user?n('返回待机','standby'):'')+b('扫码登录（演示）','identity',{id:'DEMO-QR-001',name:'扫码演示受测者'}))+(pagesRelease?'':reviewNote('ID长度、是否允许匿名，以及“无匹配→登记”的规则仍待确认；不会假设必须是手机号。'));
  case 'consent':return title('测量与资料使用',singleBody()?'体成分测量需要使用你的基础资料和测量数据。':'测量需要使用你的基础资料，以及本次测量产生的数据或影像。')+list(['用于本次测量、结果分析和生成报告。','测量结果将关联到你的账号。','告知内容为演示稿，正式条款尚未提供。'])+`<div class="wrap">${b('同意并继续','consent',{agree:true},'primary')}${b('暂不同意','consent',{agree:false})}${!valid()?b('修改会员编号','edit-identity'):''}${b('退出本次测量','end')}</div>`;
  case 'profile':return title('确认个人资料','请核对资料，确保测量结果准确。')+form('profile',field('age','年龄',state.basics.age||DEMO.age,'number','min="1" required')+select('sex','性别',[['','请选择'],['female','女'],['male','男']],state.basics.sex||DEMO.sex)+requiredFields(),'确认并继续')+(!valid()?b('修改会员编号','edit-identity'):'');
  case 'clinical':return title('住院信息','请核对本次住院信息。')+form('clinical',field('name','姓名',state.clinical?.name||'')+field('bed','床位号',state.clinical?.bed||'')+field('admission','住院号',state.clinical?.admission||''));
@@ -1077,7 +1076,7 @@ function renderPagesDemo(){
  <div class="screen-caption"><span>ANOVATOR P Series · Interactive demo</span><button type="button" data-screen-action="enter">Full screen</button></div>
  <div class="fullscreen-tools" aria-label="Display controls"><button type="button" data-screen-action="exit">Exit full screen</button></div>
  <div class="device-stage"><div class="device-viewport">${renderDevice()}</div></div>
- <p class="screen-note">Demo member ID ${publicDemoId} · Simulated measurements only.</p>
+ <p class="screen-note">${['standby','identity'].includes(state.route)?'Enter any number to try the demo. ':''}Simulated measurements only.</p>
  </main></div>`;
 }
 function scaleDevice(){const viewport=$('.device-viewport'),device=$('.device');if(!viewport||!device)return;device.style.transform='scale('+(viewport.getBoundingClientRect().width/540)+')';const link=$('#baseline-link');if(link&&typeof location!=='undefined')link.href=location.protocol==='file:'?'../global-experience-v04/index.html':location.protocol+'//'+location.host+'/baseline/';}
@@ -1178,8 +1177,8 @@ function render(){
 }
 function run(action,payload){
  if(pagesRelease&&action==='identity'){
-   if(String(payload?.id??'').trim()!==publicDemoId){state.message='Use demo member ID '+publicDemoId+'.';return;}
-   payload={id:publicDemoId,name:'Demo participant'};
+   if(!/^[0-9]+$/.test(String(payload?.id??''))){state.message='Enter any digits to continue.';return;}
+   payload={id:'DEMO-PARTICIPANT',name:'Demo participant'};
  }
  if(pagesRelease&&action==='profile'){
    payload={age:DEMO.age,sex:DEMO.sex,...(!H.automatic(state)?{height:DEMO.height}:{})};
