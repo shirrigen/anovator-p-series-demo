@@ -36,9 +36,10 @@
   // Current-session body composition unlocks optional measurements.
   // Selection defines scope; traversal can wrap inside that scope.
   function hasComplete(s,id){return !!s.results[id]&&!s.results[id].partial&&!s.results[id].needsReview;}
-  function mandatoryReady(s){return hasComplete(s,'body')&&!!s.user&&s.results.body.participantId===s.user.id;}
-  function canSkip(s,id=s.pendingTest){return s.mode==='retest'||(id!=='body'&&mandatoryReady(s));}
-  function normalizePlan(s){s.plan=activeIds(s).filter(id=>id==='body'||s.plan.includes(id));}
+  function bodyRequired(s){return root.ANOVATOR_PAGES_RELEASE!==true||s.settings.demoBodyRequired!==false;}
+  function mandatoryReady(s){return !!s.user&&(!bodyRequired(s)||(hasComplete(s,'body')&&s.results.body.participantId===s.user.id));}
+  function canSkip(s,id=s.pendingTest){return s.mode==='retest'||((id!=='body'||!bodyRequired(s))&&mandatoryReady(s));}
+  function normalizePlan(s){s.plan=activeIds(s).filter(id=>(id==='body'&&bodyRequired(s))||s.plan.includes(id));}
   function completedIds(s){return activeIds(s).filter(id=>hasComplete(s,id));}
   function circularOrder(s,start=0){const order=activeIds(s).filter(id=>s.plan.includes(id));return order.slice(start).concat(order.slice(0,start));}
   function remaining(s){
@@ -171,7 +172,7 @@
     s.receiptReturn=null;s.readingReturn=null;s.previewResult=null;
     if(!allowed(s,id)){startTask(s,id,mode);return;}
     const requested=id;
-    const following=s.scopeMode==='selected'?[id,'body']:activeIds(s);
+    const following=s.scopeMode==='selected'?(bodyRequired(s)?[id,'body']:[id]):activeIds(s);
     if(id!=='body'&&!mandatoryReady(s))id='body';
     const chosen=new Set([...s.plan,...following]);
     s.plan=activeIds(s).filter(x=>chosen.has(x));
@@ -219,7 +220,10 @@
       // A terminal skip returns to the newest readable result for End, not to the pending-work loop.
       const last=activeIds(s).filter(testId=>readableResult(s,testId))
         .sort((a,b)=>(s.results[b].revision||0)-(s.results[a].revision||0))[0];
-      if(!last)return;
+      if(!last){
+        if(!bodyRequired(s))endAssessment(s);
+        return;
+      }
       s.naturalCloseout='result/'+last;
       go(s,s.naturalCloseout);
       return;
@@ -584,7 +588,7 @@
   function selectedRecord(s){return s.selectedHistory?s.history.find(h=>h.id===s.selectedHistory):null;}
   function currentReportContext(s){const h=selectedRecord(s);return h?{results:h.results,revision:h.revision,participantId:h.participantId,historyId:h.id}:{results:s.results,revision:s.revision,participantId:s.user?.id,historyId:null};}
   function canMakeCurrentReport(s){
-    return mandatoryReady(s)&&!Object.values(s.results).some(record=>record.needsReview);
+    return mandatoryReady(s)&&validCount(s)>0&&!Object.values(s.results).some(record=>record.needsReview);
   }
   function openReport(s){
     const ctx=currentReportContext(s);
@@ -608,7 +612,7 @@
   }
   function endAssessment(s){
     // Ending measurement starts report handoff; it does not clear this participant.
-    if(s.privacyLocked||!mandatoryReady(s)){s.assessmentClosing=false;s.selectedHistory=null;go(s,'end');return;}
+    if(s.privacyLocked||!mandatoryReady(s)||!validCount(s)){s.assessmentClosing=false;s.selectedHistory=null;go(s,'end');return;}
     if(!s.assessmentClosing){
       s.assessmentReturn=(preparing(s)||s.route.startsWith('result/')||['home','results','recovery',...detailRoutes].includes(s.route))?s.route:'home';
       s.assessmentPreparation=preparing(s)?preparationContext(s):null;
@@ -892,7 +896,7 @@
       case 'plan':{
         const fromSettings=s.route==='settings';
         go(s,'plan');
-        if(s.route==='plan')s.planDraft={ids:activeIds(s).filter(id=>id==='body'||s.plan.includes(id)),useCombination:!!s.useCombination,fromSettings};
+        if(s.route==='plan')s.planDraft={ids:activeIds(s).filter(id=>(id==='body'&&bodyRequired(s))||s.plan.includes(id)),useCombination:!!s.useCombination,fromSettings};
         break;
       }
       case 'cancel-plan':
@@ -907,7 +911,7 @@
       case 'toggle-plan':{
         const id=payload.id,draft=s.planDraft;
         if(s.route!=='plan'||!draft||!allowed(s,id))break;
-        if(id==='body'){s.message='体成分是必测项目，无法取消。';break;}
+        if(id==='body'&&bodyRequired(s)){s.message='体成分是必测项目，无法取消。';break;}
         if(draft.ids.includes(id))draft.ids=draft.ids.filter(testId=>testId!==id);
         else draft.ids.push(id);
         break;
@@ -1238,6 +1242,6 @@
     if(s.report){s.reports??={};s.reports[s.report.historyId||'current']=copy(s.report);}
     return s;
   }
-  root.ANOVATOR_ENGINE={fresh,dispatch,activeIds,singleBodyOnly,allowed,remaining,next,nextAfter,naturalNext,outstanding,hasComplete,completedIds,completeCount,validCount,selectedRecord,currentReportContext,canMakeCurrentReport,reportOmissions,test,profile,copy,scope,suggestedNext,groupAvailable,canGroup,groupResultState,mandatoryReady,canSkip,gripSide,gripMissingSide,gripWorkingRecord,restoreScreen,viewedFromPreview,restoreVisibleTasks,restoreBloodPressure,bpDemoEvent,accessoryDemoEvent};
+  root.ANOVATOR_ENGINE={fresh,dispatch,activeIds,singleBodyOnly,allowed,remaining,next,nextAfter,naturalNext,outstanding,hasComplete,completedIds,completeCount,validCount,selectedRecord,currentReportContext,canMakeCurrentReport,reportOmissions,test,profile,copy,scope,suggestedNext,groupAvailable,canGroup,groupResultState,bodyRequired,mandatoryReady,canSkip,gripSide,gripMissingSide,gripWorkingRecord,restoreScreen,viewedFromPreview,restoreVisibleTasks,restoreBloodPressure,bpDemoEvent,accessoryDemoEvent};
   if(typeof module!=='undefined')module.exports=root.ANOVATOR_ENGINE;
 })(globalThis);

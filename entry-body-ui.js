@@ -31,7 +31,7 @@
    return Number.isInteger(i)&&guides[i]?i:0;
  }
 
- function renderIntroduction({b}){
+ function renderIntroduction(s,{b,E}){
    const source=bodyPath+'intro/';
    const topics=[['Body fat','body-fat'],['Muscle','muscle'],['Body water','body-water']];
    const rows=topics.map(([label,image])=>`<li><img src="${source}${image}.svg" alt="" width="24" height="24"><span>${label}</span></li>`).join('');
@@ -43,7 +43,7 @@
      <h1 class="body-intro-title">Body<br>composition</h1>
      <p class="body-intro-report">${metrics.length} results in your report</p>
      <ul class="body-intro-metrics">${rows}</ul>`,
-     taskRow(b('Get ready','body-get-ready',{},'primary')));
+     taskRow((E.canSkip(s,'body')?b('Skip','skip'):'')+b('Get ready','body-get-ready',{},'primary')));
  }
 
  function renderGuide(s,{b,esc,E}){
@@ -178,6 +178,7 @@
        video.setAttribute('aria-hidden','true');
        video.addEventListener('error',()=>video.remove(),{once:true});
      }
+     if(root.ANOVATOR_PAGES_RELEASE)video.playbackRate=s.settings.demoBodySpeed===4?4:1;
      media.append(video);
      video.play().catch(()=>video.remove());
    });
@@ -185,7 +186,7 @@
 
  root.ANOVATOR_BODY_UI={
    render(s,kind,c){
-     if(kind==='intro')return renderIntroduction(c);
+     if(kind==='intro')return renderIntroduction(s,c);
      if(kind==='prepare')return renderGuide(s,c);
      if(kind==='measure')return renderMeasure(s,c);
      if(kind==='result')return overview(s,c);

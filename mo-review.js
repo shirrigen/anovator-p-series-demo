@@ -311,14 +311,45 @@
   root.ANOVATOR_DEMO_DRIVER = {
     create(options) {
       const clock = options.clock || root;
-      const samplesByTimer = new Map();
+      const speed = () => root.ANOVATOR_PAGES_RELEASE && options.getState().settings.demoBodySpeed === 4 ? 4 : 1;
+      let captureTimer = null;
+
+      function cancelCapture(timer) {
+        for (const sample of timer.samples) clock.clearTimeout(sample);
+        clock.clearTimeout(timer.timeout);
+      }
+
+      function scheduleCapture(timer) {
+        timer.rate = speed();
+        timer.startedAt = performance.now();
+        const wait = atTime => Math.max(0, Math.min(atTime, timer.lead) - timer.elapsed) +
+          Math.max(0, atTime - Math.max(timer.elapsed, timer.lead)) / timer.rate;
+        timer.samples = timer.step.samples.filter(([, value]) => value > (timer.progress.value ?? 0))
+          .map(([atTime, value]) => clock.setTimeout(() => {
+            const current = options.getState();
+            if (captureTimer !== timer || captureProgress !== timer.progress ||
+                current.acq?.id !== timer.progress.attempt || current.stop ||
+                current.acq.step !== timer.stage || !options.enabled()) return;
+            timer.progress.value = value;
+            const cue = at('.device .body-capture-cue');
+            if (cue) paintProgress(cue, value, true);
+          }, wait(atTime)));
+        timer.timeout = clock.setTimeout(() => {
+          if (captureTimer !== timer) return;
+          cancelCapture(timer);
+          captureTimer = null;
+          timer.callback();
+        }, wait(timer.step.duration));
+      }
+
       const simulator = driver.create({
         ...options,
         clock: {
           clearTimeout(timer) {
-            for (const sample of samplesByTimer.get(timer) || []) clock.clearTimeout(sample);
-            samplesByTimer.delete(timer);
-            clock.clearTimeout(timer);
+            if (timer === captureTimer) {
+              cancelCapture(timer);
+              captureTimer = null;
+            } else clock.clearTimeout(timer);
           },
           setTimeout(callback, milliseconds) {
             const state = options.getState();
@@ -326,21 +357,9 @@
             const stage = state.acq?.step;
             const step = progress && milliseconds === 2200 ? captureSteps[stage] : null;
             if (!step) return clock.setTimeout(callback, milliseconds);
-            const samples = step.samples.map(([delay, value]) => clock.setTimeout(() => {
-              const current = options.getState();
-              if (captureProgress !== progress || current.acq?.id !== progress.attempt || current.stop ||
-                  current.acq.step !== stage || !options.enabled()) return;
-              progress.value = value;
-              const cue = at('.device .body-capture-cue');
-              if (cue) paintProgress(cue, value, true);
-            }, delay));
-            const timer = clock.setTimeout(() => {
-              for (const sample of samples) clock.clearTimeout(sample);
-              samplesByTimer.delete(timer);
-              callback();
-            }, step.duration);
-            samplesByTimer.set(timer, samples);
-            return timer;
+            captureTimer = { callback, step, stage, progress, elapsed: 0, lead: stage === 0 ? entryDuration : 0 };
+            scheduleCapture(captureTimer);
+            return captureTimer;
           }
         }
       });
@@ -358,6 +377,17 @@
             captureProgress = { attempt: state.acq.id, value: null };
           }
           simulator.sync();
+        },
+        retimeBody() {
+          const video = at('.device .body-measure-media video');
+          if (video) video.playbackRate = speed();
+          const timer = captureTimer;
+          if (!timer || timer.rate === speed()) return;
+          const elapsed = performance.now() - timer.startedAt;
+          const leadRemaining = Math.max(0, timer.lead - timer.elapsed);
+          timer.elapsed += Math.min(leadRemaining, elapsed) + Math.max(0, elapsed - leadRemaining) * timer.rate;
+          cancelCapture(timer);
+          scheduleCapture(timer);
         },
         clear() {
           captureProgress = null;
@@ -378,7 +408,7 @@
   entryFilm.addEventListener('playing', () => entryFilm.classList.add('is-playing'));
   entryFilm.addEventListener('error', () => entryFilm.classList.remove('is-playing'));
   let previousPage = null;
-  let controlsOpen = true;
+  let controlsOpen = !root.ANOVATOR_PAGES_RELEASE;
 
   function stageFilm(panel) {
     if (!panel || reduction.matches) {

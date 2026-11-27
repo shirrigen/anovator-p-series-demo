@@ -35,7 +35,7 @@ if(directNavigation&&!state.selectedHistory&&state.results.posture){
   if(state.route==='posture-summary')state.route='result/posture';
   if(state.returnRoute==='posture-summary')state.returnRoute='result/posture';
 }
-if(directNavigation&&state.completedResultRevision==null&&E.mandatoryReady(state)){
+if(directNavigation&&state.completedResultRevision==null&&E.hasComplete(state,'body')&&state.results.body.participantId===state.user?.id){
  // Older builds cleared the current result when the user selected another project.
  const body=state.results.body;
  if(body.revision===state.revision&&(state.localTasks?.bodyIntroReady||body.priorRevision!=null))
@@ -108,6 +108,12 @@ function showsBodyIntroduction(){
 }
 function directBodyCapture(){
  return directNavigation&&state.route==='measure/body'&&state.acq?.testId==='body';
+}
+function canFinishDemoCapture(){
+ return pagesRelease&&directBodyCapture()&&!state.stop&&!state.privacyLocked&&H.usable(state)&&W.usable(state);
+}
+function demoRequirementLocked(){
+ return !!(state.acq||state.stop||state.assessmentClosing||state.privacyLocked);
 }
 function continuationHint(id){if(singleBody())return '';if(id==='body'&&!E.mandatoryReady(state)&&state.mode!=='retest')return '<span class="continuation-hint">完成体成分后，可选择其他项目</span>';const next=directNavigation?E.naturalNext(state,id):E.nextAfter(state,id);return state.mode==='retest'?'':`<span class="continuation-hint">${next?'下一项：'+esc(t(next).name):'已到最后一项。可结束测量，或选择其他项目。'}</span>`;}
 // Single and combined results share task priorities; ending the session belongs
@@ -803,11 +809,12 @@ function groupSimulator(){
 function renderPlan(){
  const draft=state.planDraft;
  const selected=draft?.ids||E.scope(state).chosen;
+ const needsBody=E.bodyRequired(state);
  const canCombine=E.groupAvailable(state)&&['body','bp'].every(id=>selected.includes(id)&&!E.hasComplete(state,id));
  const combine=canCombine?`<label class="check-row"><input type="checkbox" data-action="choose-combination" data-payload='{"value":${!draft?.useCombination}}' ${draft?.useCombination?'checked':''}><span><strong>体成分与血压</strong><br><small>一起准备，分别查看结果。</small></span></label>`:'';
- return title('本次测量计划','体成分为必测项。其余项目可以调整，也可以在测量时跳过。')+
+ return title('本次测量计划',needsBody?'体成分为必测项。其余项目可以调整，也可以在测量时跳过。':'Choose the tests for this session.')+
    b('全选 · '+active().length+' 项','choose-all',{},'small')+
-   active().map(id=>`<label class="check-row"><input type="checkbox" data-action="toggle-plan" data-payload="${esc(JSON.stringify({id}))}" ${selected.includes(id)?'checked':''} ${id==='body'?'disabled':''}><span><strong>${esc(t(id).name)}${id==='body'?' · 必测':''}</strong><br><small>${esc(status(id))}</small></span></label>`).join('')+combine+
+   active().map(id=>`<label class="check-row"><input type="checkbox" data-action="toggle-plan" data-payload="${esc(JSON.stringify({id}))}" ${selected.includes(id)?'checked':''} ${id==='body'&&needsBody?'disabled':''}><span><strong>${esc(t(id).name)}${id==='body'&&needsBody?' · 必测':''}</strong><br><small>${esc(status(id))}</small></span></label>`).join('')+combine+
    `<div class="wrap task-actions">${b('取消',draft?.fromSettings?'cancel-plan':'home')}${b('保存计划 · '+selected.length+' 项','apply-plan',{},'primary',!selected.length)}</div>`;
 }
 function groupPage(){
@@ -939,6 +946,7 @@ function renderReport(){
 function renderExit(){
  if(state.privacyLocked)return title('退出本次测量','个人资料保持隐藏。')+info('退出后将隐藏个人资料，已有测量记录会保留。')+`<div class="wrap">${b('确认退出','confirm-end',{},'primary')}${b('返回锁屏','navigate',{page:'locked'})}</div>`;
  if(!state.consent&&!valid())return title('退出本次测量','本次尚未开始测量。')+`<div class="wrap">${b('确认退出','confirm-end',{},'primary')}${n('返回确认','consent')}</div>`;
+ if(!E.bodyRequired(state)&&!valid())return title('Exit session','No readings have been recorded.')+`<div class="wrap">${b('Exit','confirm-end',{},'primary')}${b('Keep testing','home')}</div>`;
  if(!E.mandatoryReady(state))return title('体成分尚未完成','请先完成体成分测量，再生成报告。')+info(valid()?'已有结果会保留。可继续测量，或退出本次测量。':'继续测量，或退出本次测量。')+`<div class="wrap">${b('继续测量','fill-test',{id:'body'},'primary')}${b('退出','confirm-end',{},'quiet')}</div>`;
  return title('退出本次测量','退出后将隐藏个人资料，已有测量记录会保留。')+info(state.report?.saved?'报告已保存。':'报告尚未保存，请返回报告页重试。')+`<div class="wrap">${b('返回报告','end',{},'primary')}${b('退出','confirm-end',{},'quiet')}</div>`;
 }
@@ -957,7 +965,7 @@ function renderSessionFooter(){
    }
    if(layer==='prepare'||state.route.startsWith('prepare/')||state.route==='group-prepare'){
      if(state.mode==='retest')return '';
-     return E.mandatoryReady(state)?'':b('Exit session','end',{},'quiet session-end');
+     return (E.bodyRequired(state)?E.mandatoryReady(state):valid())?'':b('Exit session','end',{},'quiet session-end');
    }
  }
  if(layer==='prepare'&&!singleBody()){
@@ -1122,9 +1130,17 @@ function renderExperience(){
  <p class="screen-note">模拟测量与停止响应，不连接真实设备。数值为样例；资料已预填，自动测高与称重随体成分完成。</p>${simulator()}</main><aside class="aside">${inspector(inspect)}</aside></div>`;
 }
 function renderPagesDemo(){
+ const fast=state.settings.demoBodySpeed===4;
  return `<div class="workspace"><main>
  <div class="screen-caption"><span>ANOVATOR P Series · Interactive demo</span><button type="button" data-screen-action="enter">Full screen</button></div>
- <div class="fullscreen-tools" aria-label="Display controls"><button type="button" data-screen-action="exit">Exit full screen</button></div>
+ <div class="fullscreen-tools" aria-label="Display controls"><button type="button" data-screen-action="controls" lang="zh-CN" aria-controls="demo-controls" aria-expanded="false">演示控制</button><button type="button" data-screen-action="exit">Exit full screen</button></div>
+ <details id="demo-controls" class="review-panel pages-demo-controls" lang="zh-CN">
+ <summary>演示控制</summary>
+ <div class="pages-demo-options">
+ <label><input type="checkbox" data-action="demo-body-required" ${E.bodyRequired(state)?'checked':''} ${demoRequirementLocked()?'disabled':''}>体成分必测</label>
+ <label>体成分进度 <select data-demo-body-speed><option value="1">原速</option><option value="4" ${fast?'selected':''}>4× 加速</option></select></label>
+ ${canFinishDemoCapture()?b('跳过等待，查看结果','demo-finish-body',{},'small'):''}
+ </div></details>
  <div class="device-stage"><div class="device-viewport">${renderDevice()}</div></div>
  <p class="screen-note">${['standby','identity'].includes(state.route)?'Enter any number to try the demo. ':''}Simulated measurements only.</p>
  </main></div>`;
@@ -1467,6 +1483,31 @@ function chooseDirectoryProject(id,prepare=false){
 }
 function act(action,payload={},source){
  if(['inspect','preview-page'].includes(action)&&!C.isRouteVisible(payload.id))return;
+ if(pagesRelease&&action==='demo-body-required'){
+   if(demoRequirementLocked())return;
+   const required=!E.bodyRequired(state);
+   state.settings.demoBodyRequired=required;
+   if(required){
+     if(state.plan.length)state.plan=active().filter(id=>id==='body'||state.plan.includes(id));
+     if(state.planDraft&&!state.planDraft.ids.includes('body'))state.planDraft.ids.unshift('body');
+     if(!E.mandatoryReady(state)&&state.route.startsWith('prepare/')&&state.pendingTest!=='body')
+       run('open-direct-project',{id:'body'});
+   }
+   render();
+   $('#demo-controls [data-action="demo-body-required"]')?.focus({preventScroll:true});
+   return;
+ }
+ if(pagesRelease&&action==='demo-finish-body'){
+   if(!canFinishDemoCapture())return;
+   const attempt=state.acq;
+   demoDriver?.clear();
+   const remaining=attempt.sequence.length-attempt.sequence.indexOf(attempt.step);
+   for(let index=0;index<remaining&&state.acq===attempt;index++){
+     run('advance',{acqId:attempt.id});
+   }
+   render();
+   return;
+ }
  if(action==='end'&&canEndFromResult()){openDirectEnd(source);return;}
  if(action==='start-measure')MOTION_RUNTIME?.armSound(payload.id||state.pendingTest);
  if(action==='motion-sim'){
@@ -1572,6 +1613,12 @@ document.addEventListener('keydown',event=>{
 });
 document.addEventListener('change',event=>{
  const el=event.target;
+ if(pagesRelease&&el.hasAttribute('data-demo-body-speed')){
+   state.settings.demoBodySpeed=el.value==='4'?4:1;
+   demoDriver?.retimeBody?.();
+   persist();
+   return;
+ }
  if(el.dataset?.oxygenControl){oxygenHost?.change(el);return;}
  if(el.id==='profile-select'){act('switch-profile',{id:el.value});}
  else if(el.id==='role-select'){state.role=el.value;render();}

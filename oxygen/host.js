@@ -60,7 +60,7 @@ window.ANOVATOR_OXYGEN_HOST = function createOxygenHost({
     function packet(acqId){return {acqId,participantId:owner};}
     const active=id=>valid()&&s.acq?.testId==='oxygen'&&s.acq.id===id;
     return {
-      automatic, snapshot:()=>snapshot(s),next:()=>destination(s),canMakeReport:()=>E.mandatoryReady(s),
+      automatic, snapshot:()=>snapshot(s),next:()=>destination(s),canMakeReport:()=>E.canMakeCurrentReport(s),
       resultBack,resultEndGlyph,resultEndEmphasized,directEnd,
       retryView(){if(valid()){view.instrument?.dispose();current=null;repaint();}},
       begin(){if(!valid()||s.route!=='prepare/oxygen'||s.acq)return null;command('start-measure',{id:'oxygen'});return s.acq?.testId==='oxygen'?s.acq.id:null;},
@@ -75,7 +75,7 @@ window.ANOVATOR_OXYGEN_HOST = function createOxygenHost({
       leave(kind,source){
         if(!valid()||s.acq)return;
         if(kind==='end'&&directEnd){
-          if(s.route==='result/oxygen'&&E.mandatoryReady(s))requestEnd?.(source);
+          if(s.route==='result/oxygen'&&E.canMakeCurrentReport(s))requestEnd?.(source);
           return;
         }
         if(kind==='back'){

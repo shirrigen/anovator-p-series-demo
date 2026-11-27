@@ -47,6 +47,9 @@
 .mo-flow-review #demo-controls > .wrap:not(:has(button)) { display: none; }
 .mo-flow-review #demo-controls .demo-mode { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
 .mo-flow-review #demo-controls .review-extra { margin-top: 14px; }
+.pages-demo-options { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; margin-top: 8px; }
+.pages-demo-options label { display: inline-flex; align-items: center; gap: 5px; }
+.pages-demo-options select { padding: 4px 6px; border: 1px solid #54606c; border-radius: 5px; background: #282b30; color: var(--review-ink); }
 .mo-flow-review .screen-fullscreen :is(.screen-note, .workspace > main > .entry-options) { display: none; }
 .mo-flow-review .screen-fullscreen .workspace { width: 100%; padding: 0; }
 .mo-flow-review .screen-fullscreen .device-viewport { max-width: none; }
