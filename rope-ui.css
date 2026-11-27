@@ -1,0 +1,57 @@
+/* S04 v04, with the count and clock fixed inside the front rope arc. */
+.rope-canvas-slot { position: absolute; left: 0; top: -48px; width: 360px; height: 640px; z-index: -1; }
+.rope-canvas-slot canvas { display: block; width: 100%; height: 100%; }
+.rope-instruction { position: relative; margin: 13px 24px 0; color: #c6c6cc; font-size: 15px; line-height: 20px; }
+.rope-ready-art {
+  position: absolute;
+  top: 65px;
+  left: 0;
+  width: 360px;
+  height: 340px;
+  object-fit: contain;
+  z-index: -1;
+}
+.rope-note { position: absolute; bottom: 20px; left: 24px; right: 24px; margin: 0; color: #c6c6cc; font-size: 13px; }
+.rope-reading { position: absolute; top: 132px; left: 24px; right: 24px; text-align: center; }
+.rope-count-name { margin: 0; color: #c6c6cc; font-size: 15px; line-height: 21px; }
+.rope-count { display: block; height: 87px; font-size: 65px; line-height: 86px; font-variant-numeric: tabular-nums; }
+.rope-time { display: flex; align-items: baseline; justify-content: center; gap: 20px; margin-top: -7px; }
+.rope-time small { color: #c6c6cc; font-size: 13px; }
+.rope-time strong { width: 80px; font-size: 34px; line-height: 47px; font-variant-numeric: tabular-nums; }
+.direct-navigation .rope-time { display: grid; grid-template-columns: 54px 80px; }
+.direct-navigation .rope-time small { text-align: right; }
+.rope-screen[data-rope-stage="confirming"] .rope-count { color: #c6c6cc; }
+.rope-status {
+  position: absolute;
+  top: 299px;
+  left: 16px;
+  right: 16px;
+  margin: 0;
+  color: #c6c6cc;
+  text-align: center;
+  font-size: 14px;
+}
+.rope-screen[data-rope-stage="receipt"] .rope-status::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 7px;
+  vertical-align: 2px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.direct-navigation .rope-screen[data-rope-stage="receipt"] .rope-status::before {
+  color: #d3ebe7;
+  animation: rope-receipt var(--motion-read, 192ms) var(--motion-ease-read, ease-out);
+}
+.direct-navigation .rope-screen:is([data-rope-stage="confirming"],[data-rope-stage="stopping"]) .rope-status {
+  color: #e5e5e6;
+}
+@keyframes rope-receipt {
+  from { opacity: .42; box-shadow: 0 0 6px #d3ebe766; }
+  to { opacity: 1; box-shadow: 0 0 0 transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .direct-navigation .rope-screen[data-rope-stage="receipt"] .rope-status::before { animation: none; }
+}

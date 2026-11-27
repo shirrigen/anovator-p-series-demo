@@ -1,0 +1,107 @@
+/* Shared copy tiers for the compact 360 × 640 device canvas. */
+.direct-navigation {
+  --compact-font: ANOVATORChrome, MiSans, sans-serif;
+  --compact-title-size: 24px;
+  --compact-title-line: 36px;
+  --compact-action-size: 20px;
+  --compact-action-line: 28px;
+  --compact-body-size: 14px;
+  --compact-body-line: 20px;
+}
+
+.direct-navigation .device .device-main :is(.bp-title, .body-title, .st-title, .st-prep-label) {
+  font: 700 var(--compact-title-size)/var(--compact-title-line) var(--compact-font);
+  letter-spacing: 0;
+}
+.direct-navigation .device .device-main :is(.bp-title, .body-title, .st-title, .st-prep-label) strong {
+  font-weight: inherit;
+}
+.direct-navigation .device .device-main .st-screen :is(.st-title, .st-prep-label) {
+  top: 0;
+  color: #f5f5f5;
+}
+.direct-navigation .device .device-main .body-screen > .body-title {
+  padding-top: 0;
+}
+.direct-navigation .device .device-main [data-body-stage="guide"] > .body-title {
+  padding-top: 8px;
+}
+.direct-navigation .device .device-main .body-measure-copy .body-title {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+}
+.direct-navigation .device .device-main .accessory-screen[data-accessory="grip"][data-accessory-stage="ready"] > .body-title {
+  top: 0;
+  width: 312px;
+  font: 700 var(--compact-title-size)/var(--compact-title-line) var(--compact-font);
+}
+.direct-navigation .grip-ready-intro { top: 44px; }
+.direct-navigation .grip-ready-detail { top: 260px; }
+.direct-navigation .grip-ready-connection { top: 447px; }
+.direct-navigation .grip-ready-cue { top: 474px; }
+
+/* Utility headings on the 540px host are painted at 1.5× the design size. */
+.direct-navigation .device > .device-main > h1,
+.direct-navigation .device > .device-main > .task-heading > h1 {
+  font: 700 36px/54px var(--compact-font);
+  letter-spacing: 0;
+}
+.direct-navigation .device .device-main .entry-intro h1 {
+  font: 400 var(--compact-title-size)/var(--compact-title-line) var(--compact-font);
+}
+.direct-navigation .device .project-directory h1 {
+  font: 700 var(--compact-title-size)/var(--compact-title-line) var(--compact-font);
+  letter-spacing: 0;
+}
+.direct-navigation .device > .device-main > :is(p, .info, .message),
+.direct-navigation .device > .device-main > .task-heading > p {
+  font: 400 21px/30px var(--compact-font);
+}
+
+.direct-navigation .device .device-main :is(
+  .body-guide-title, .body-chapter h3, .bp-ready-copy h2, .bp-focus,
+  .pose-instruction h2, .pose-empty h2, .motion-prep-copy h2, .balance-fault h2,
+  .shoulder-motion-callout h2, .grip-ready-intro h2, .grip-ready-stance h2,
+  .accessory-breath strong, .accessory-recovery h2, .st-prep-head, .st-position-head,
+  .st-prep-instruction, .st-position-instruction,
+  .st-cover, .st-va-instruction, .st-cv-instruction, .st-as-instruction, .st-rt-instruction
+) {
+  font: 700 var(--compact-action-size)/var(--compact-action-line) var(--compact-font);
+}
+.direct-navigation .device .device-main .accessory-screen[data-accessory="grip"][data-accessory-stage="waiting"] .accessory-reading h2 {
+  font: 700 var(--compact-action-size)/var(--compact-action-line) var(--compact-font);
+}
+.direct-navigation .device-main .st-prep-head { top: 46px; }
+
+.direct-navigation .device .device-main :is(
+  .body-position span, .body-chapter-copy > p:where(:last-child:not(.body-guide-index)),
+  .body-measure-copy p, .review-capture-hint, .bp-ready-copy p, .bp-ready-status p,
+  .bp-hint, .bp-status, .bp-connected, .shoulder-motion-callout p,
+  .pose-instruction p, .pose-empty p, .pose-note, .motion-prep-copy p:where(:not(.motion-quiet)),
+  .motion-intro, .motion-status, .balance-fault p,
+  .grip-ready-intro p, .grip-ready-stance p, .grip-ready-cue, .grip-ready-connection,
+  .accessory-breath span, .accessory-phrase, .accessory-status, .accessory-recovery p,
+  .rope-instruction, .rope-note, .rope-status,
+  p.st-copy:where(:not(.st-prep-instruction,.st-position-instruction,.st-cover,
+    .st-va-instruction,.st-cv-instruction,.st-as-instruction,.st-rt-instruction))
+) {
+  font: 400 var(--compact-body-size)/var(--compact-body-line) var(--compact-font);
+}
+.direct-navigation .device .project-directory :is(.directory-progress p, .directory-progress span) {
+  font: 400 var(--compact-body-size)/var(--compact-body-line) var(--compact-font);
+}
+.direct-navigation .device .device-main :is(
+  [data-bp-stage="waiting"] p.bp-hint, [data-bp-stage="measuring"] p.bp-hint,
+  [data-motion-phase="ready"] p.motion-intro, [data-rope-stage="ready"] p.rope-instruction
+) {
+  font: 700 var(--compact-action-size)/var(--compact-action-line) var(--compact-font);
+}
+.direct-navigation .assessment-end-dialog {
+  font-size: calc(var(--compact-body-size) * var(--end-scale, 1));
+  line-height: calc(var(--compact-body-line) * var(--end-scale, 1));
+}
+.direct-navigation .assessment-end-dialog h2 {
+  font-size: calc(var(--compact-action-size) * var(--end-scale, 1));
+  line-height: calc(var(--compact-action-line) * var(--end-scale, 1));
+}

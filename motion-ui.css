@@ -1,0 +1,275 @@
+/* 360 × 640 motion assessment content, within the shared device chrome. */
+.motion-stage .body-title { padding-top: 8px; font-weight: 400; }
+.motion-intro {
+  position: relative;
+  z-index: 1;
+  margin: 12px 24px 0;
+  font-size: 15px;
+  line-height: 20px;
+  color: #d4d5d9;
+}
+.motion-prep-copy { position: absolute; z-index: 1; top: 93px; left: 24px; width: 230px; }
+.device-main .motion-prep-copy h2 { margin: 0; font-size: 25px; line-height: 29px; color: #f5f5f5; }
+.motion-prep-copy p { margin: 8px 0; font-size: 14px; line-height: 19px; color: #c6c6cc; }
+.motion-prep-copy.failure-copy { top: 145px; width: 300px; }
+.motion-prep-copy .motion-quiet, .motion-quiet { color: #c6c6cc; font-size: 12px; line-height: 17px; }
+.motion-ready-art {
+  position: absolute;
+  left: 0;
+  top: 57px;
+  width: 360px;
+  height: 394px;
+  overflow: hidden;
+}
+.motion-ready-art img {
+  position: absolute;
+  left: 0;
+  top: -89px;
+  width: 360px;
+  height: auto;
+  clip-path: inset(16% 0 26%);
+  mask-image: linear-gradient(0deg, transparent 24%, #000 31%, #000 78%, transparent 85%);
+}
+.motion-stage[data-motion-test="pushups"] .motion-ready-art img { top: -99px; clip-path: inset(24% 0 41.5%); }
+.motion-status {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 18px;
+  margin: 0;
+  color: #c6c9d0;
+  font-size: 13px;
+  line-height: 17px;
+}
+.motion-status:empty { display: none; }
+.motion-readout > span { display: block; color: #d5dbe0; font-size: 14px; line-height: 18px; }
+.motion-readout p { display: flex; margin: 2px 0 0; align-items: baseline; gap: 5px; }
+.motion-readout strong { color: #f5f5f5; font-size: 61px; line-height: 68px; font-variant-numeric: tabular-nums; }
+.motion-readout small { color: #d9dce2; font-size: 15px; }
+.motion-readout:has(p) { min-height: 86px; }
+
+.motion-stage[data-motion-test="balance"] .body-title { padding-top: 0; font-size: 24px; line-height: 36px; letter-spacing: 0; }
+.motion-stage[data-motion-test="balance"] .motion-intro {
+  position: absolute;
+  top: 48px;
+  left: 24px;
+  right: 24px;
+  margin: 0;
+  color: #bfc2c8;
+  font-size: 14px;
+  line-height: 20px;
+}
+.motion-stage[data-motion-test="balance"] .motion-status { bottom: 22px; color: #bfc2c8; font-size: 14px; line-height: 20px; }
+.balance-ready-copy { top: 69px; width: 180px; }
+.device-main .balance-ready-copy h2 { font-size: 22px; line-height: 28px; }
+.balance-ready-copy p { color: #bfc2c8; line-height: 20px; }
+.balance-ready-copy .balance-position-cue { margin-top: 31px; color: #f5f5f5; }
+.balance-ready-copy ol { list-style: decimal-leading-zero; padding: 0 0 0 30px; margin: 14px 0; color: #f5f5f5; font-size: 14px; line-height: 32px; }
+.balance-ready-copy li::marker { content: counter(list-item, decimal-leading-zero) "   "; font-weight: 700; }
+.balance-ten { margin-top: 16px; }
+.balance-ten strong { display: block; font-size: 32px; line-height: 38px; }
+.balance-ten small { color: #bfc2c8; font-size: 14px; line-height: 20px; }
+.balance-ready-pose { position: absolute; top: 38px; left: 194px; width: 129px; height: 386px; object-fit: contain; }
+.balance-pose-caption, .balance-retained {
+  position: absolute;
+  top: 431px;
+  margin: 0;
+  color: #bfc2c8;
+  font-size: 12px;
+  line-height: 16px;
+}
+.balance-pose-caption { left: 194px; width: 129px; text-align: center; }
+.balance-retained { left: 24px; font-size: 14px; line-height: 20px; }
+.balance-fault { position: absolute; top: 59px; left: 24px; right: 24px; }
+.device-main .balance-fault h2 { margin: 0 0 9px; font-size: 22px; line-height: 26px; }
+.balance-fault p { margin: 0; color: #bfc2c8; font-size: 14px; line-height: 20px; }
+.balance-vessel {
+  position: absolute;
+  top: 112px;
+  left: 49px;
+  width: 262px;
+  height: 251px;
+  display: grid;
+  place-items: center;
+}
+.motion-stage[data-motion-test="balance"]:is([data-motion-phase="invalid"],[data-motion-phase="stopping"]) .balance-vessel { opacity: .62; }
+.balance-vessel canvas { display: block; width: 100%; height: 100%; object-fit: contain; }
+.balance-vessel:not([data-ready])::before {
+  content: "";
+  position: absolute;
+  width: 221px;
+  height: 221px;
+  border-radius: 50%;
+  border: 1px solid #81939b4a;
+  box-shadow: inset 2px 2px 14px #a9c9d242, inset 0 -25px 80px #a2c1d92a;
+}
+.balance-readings {
+  position: absolute;
+  left: 40px;
+  right: 40px;
+  top: 372px;
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 14px;
+}
+.balance-readings .motion-readout > span { color: #f5f5f5; line-height: 20px; }
+.balance-readings .motion-readout p { gap: 4px; margin-top: 0; align-items: baseline; }
+.balance-readings .motion-readout strong { font-size: 55px; line-height: 58px; }
+.balance-readings .motion-readout:last-child p { margin-top: 12px; }
+.balance-readings .motion-readout:last-child strong { font-size: 40px; line-height: 46px; }
+.balance-readings .motion-readout small { color: #bfc2c8; font-size: 16px; }
+.balance-readings .motion-readout > .balance-time-track { display: none; }
+.direct-navigation .balance-readings .motion-readout > .balance-time-track {
+  display: block;
+  position: relative;
+  width: 94px;
+  height: 1px;
+  margin-top: 6px;
+  background: #41494d;
+}
+.balance-time-track::after {
+  position: absolute;
+  inset: 0;
+  transform: scaleX(var(--balance-time-left, 1));
+  transform-origin: left;
+  background: #c4e0e5;
+  content: "";
+}
+@media (prefers-reduced-motion: reduce) {
+  .direct-navigation .balance-readings .balance-time-track::after { display: none; }
+}
+
+.shoulder-placeholder-icon {
+  position: absolute;
+  top: 163px;
+  left: 128px;
+  width: 104px;
+  height: 104px;
+  background: #c6c9d3;
+  mask: url("assets/measurement-home/MP08-shoulder-mobility.svg") center / contain no-repeat;
+}
+.motion-stage[data-motion-test="shoulder"][data-motion-phase="ready"] .shoulder-placeholder-icon { top: 210px; }
+.motion-stage[data-motion-test="shoulder"][data-motion-phase="result"] .shoulder-placeholder-icon {
+  top: 47px;
+  left: auto;
+  right: 24px;
+  width: 32px;
+  height: 32px;
+}
+.shoulder-motion-callout {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 46px;
+  z-index: 1;
+}
+.shoulder-motion-callout p { margin: 0 0 3px; color: #c3cdd6; font-size: 12px; line-height: 16px; }
+.shoulder-motion-callout .shoulder-direction { color: #f5f5f5; font-size: 15px; line-height: 18px; }
+.device-main .shoulder-motion-callout h2 { margin: 6px 0 8px; color: #f5f5f5; font-size: 22px; line-height: 27px; }
+.shoulder-live { position: absolute; left: 24px; bottom: 41px; }
+.shoulder-live p { margin: 1px 0 5px; }
+.shoulder-live .motion-readout strong { font-size: 52px; line-height: 56px; }
+.shoulder-live .motion-readout:has(p) { min-height: 0; }
+.shoulder-live .motion-readout small { align-self: flex-start; margin-top: 6px; font-size: 23px; }
+.device .shoulder-partial-action {
+  position: absolute;
+  bottom: 15px;
+  left: 24px;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #f5f5f5;
+  font-size: 12px;
+  text-decoration: underline;
+}
+.shoulder-results { position: absolute; top: 103px; left: 24px; right: 24px; }
+.shoulder-result-columns, .shoulder-results section > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.shoulder-result-columns { border-bottom: 1px solid #58606a; padding-bottom: 11px; font-size: 15px; font-weight: 700; }
+.shoulder-results section {
+  padding: 14px 0 13px;
+  border-bottom: 1px solid #363c45;
+  background: radial-gradient(ellipse at 23% 97%,#91a1bc19 0%,transparent 68%);
+}
+.device-main .shoulder-results h2 { margin: 0 0 5px; font-size: 16px; line-height: 21px; }
+.shoulder-results section strong { font-size: 43px; line-height: 52px; }
+.shoulder-results section span { align-self: center; font-size: 14px; color: #c6c9cf; }
+.shoulder-retakes {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 17px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 10px;
+}
+.device .shoulder-retakes button {
+  min-height: 34px;
+  padding: 4px 3px;
+  border: 0;
+  border-bottom: 1px solid #484c52;
+  border-radius: 0;
+  background: transparent;
+  color: #f4f4f4;
+  font-size: 11px;
+}
+
+.push-motion-graphic, .jump-motion-graphic {
+  position: absolute;
+  top: 108px;
+  left: 15px;
+  width: 330px;
+  height: 220px;
+}
+.push-motion-graphic { top: 100px; }
+.motion-stage[data-motion-phase="repeating"] .push-motion-points { opacity: .74; }
+.motion-stage[data-rep-outcome="counted"] .push-motion-points {
+  animation: push-accept .7s ease both;
+}
+.direct-navigation .motion-stage[data-rep-outcome="counted"] .push-motion-points { animation: none; }
+@keyframes push-accept { 0% { filter: drop-shadow(0 0 8px #f8fbff); opacity: 1; } 100% { filter: none; opacity: .74; } }
+.motion-stage[data-motion-phase="lost"] .push-motion-graphic { opacity: .34; }
+.motor-live { position: absolute; top: 329px; left: 44px; }
+.jump-go {
+  position: absolute;
+  top: 87px;
+  left: 24px;
+  margin: 0;
+  width: 165px;
+  color: #f4f5f8;
+  font-size: 52px;
+  line-height: 60px;
+  font-weight: 700;
+}
+.motion-stage[data-motion-phase="airborne"] .jump-lift {
+  transform: translateY(-24px);
+  animation: jump-raise .62s cubic-bezier(.18,.62,.26,1) both;
+}
+.direct-navigation .motion-stage[data-motion-phase="airborne"] .jump-lift {
+  animation: none;
+  transform: translateY(-18px);
+}
+@keyframes jump-raise { from { transform: translateY(12px); opacity: .38; } to { transform: translateY(-24px); opacity: 1; } }
+.motion-stage[data-motion-phase="landing"] .jump-lift { opacity: .55; }
+.motion-stage[data-motion-phase="invalid"] .jump-motion-graphic { opacity: .37; }
+
+.scan-field {
+  position: absolute;
+  top: 184px;
+  left: 64px;
+  width: 232px;
+  height: 208px;
+}
+.scan-field img { position: absolute; top: 0; left: 55px; width: 122px; opacity: .84; }
+.scan-field svg { position: absolute; top: 53px; left: 0; width: 232px; }
+.motion-stage[data-motion-phase="platform-stopping"] .scan-field svg { opacity: .56; }
+@media (prefers-reduced-motion: reduce) {
+  .motion-stage[data-rep-outcome="counted"] .push-motion-points,
+  .motion-stage[data-motion-phase="airborne"] .jump-lift { animation: none; }
+  .direct-navigation .motion-stage[data-motion-phase="airborne"] .jump-lift { transform: none; }
+}

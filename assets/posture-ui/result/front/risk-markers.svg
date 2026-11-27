@@ -1,0 +1,22 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="360" height="493" viewBox="0 0 360 493" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="22 / Normal and risk locators">
+<circle id="Risk backing / Head tilt" cx="179.5" cy="169.5" r="5.5" fill="black"/>
+<circle id="Risk marker / Head tilt / circle" cx="179.5" cy="169.5" r="3" fill="black" stroke="#7CD6B8"/>
+<circle id="Risk marker / Head tilt / core" cx="180" cy="169" r="1" fill="#7CD6B8"/>
+<circle id="Risk backing / Shoulder left" cx="150" cy="213" r="7" fill="black"/>
+<circle id="Risk backing / Shoulder right" cx="210" cy="213" r="7" fill="black"/>
+<circle id="Risk backing / Spinal curvature" cx="179.5" cy="252.5" r="5.5" fill="black"/>
+<circle id="Risk marker / Spinal curvature / circle" cx="179.5" cy="252.5" r="3" fill="black" stroke="#7CD6B8"/>
+<circle id="Risk marker / Spinal curvature / core" cx="180" cy="253" r="1" fill="#7CD6B8"/>
+<circle id="Risk backing / Knee left" cx="164.5" cy="379.5" r="6.5" fill="black"/>
+<path id="Risk marker / Knee left / High diamond" d="M165 374L171 380L165 386L159 380L165 374Z" fill="black" stroke="#EE8C75"/>
+<circle id="Risk marker / Knee left / core" cx="164.5" cy="379.5" r="1.5" fill="#EE8C75"/>
+<circle id="Risk backing / Knee right" cx="195.5" cy="379.5" r="6.5" fill="black"/>
+<path id="Risk marker / Knee right / High diamond" d="M196 374L202 380L196 386L190 380L196 374Z" fill="black" stroke="#EE8C75"/>
+<circle id="Risk marker / Knee right / core" cx="196.5" cy="379.5" r="1.5" fill="#EE8C75"/>
+<path id="Risk marker / Shoulder left / High diamond" d="M150 207L156 213L150 219L144 213L150 207Z" fill="black" stroke="#EE8C75"/>
+<circle id="Risk marker / Shoulder left / High core" cx="150.5" cy="213.5" r="1.5" fill="#EE8C75"/>
+<path id="Risk marker / Shoulder right / High diamond" d="M210 207L216 213L210 219L204 213L210 207Z" fill="black" stroke="#EE8C75"/>
+<circle id="Risk marker / Shoulder right / High core" cx="209.5" cy="213.5" r="1.5" fill="#EE8C75"/>
+</g>
+</svg>

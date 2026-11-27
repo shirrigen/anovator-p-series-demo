@@ -1,0 +1,64 @@
+.direct-navigation {
+  --motion-press: 80ms;
+  --motion-release: 140ms;
+  --motion-enter: 170ms;
+  --motion-read: 192ms;
+  --motion-exit: 170ms;
+  --motion-gap: 45ms;
+  --motion-ease-press: cubic-bezier(.40, 0, .20, 1);
+  --motion-ease-enter: cubic-bezier(.22, 1, .36, 1);
+  --motion-ease-read: cubic-bezier(.24, .62, .36, 1);
+  --motion-ease-exit: cubic-bezier(.20, .55, .40, 1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .direct-navigation .device :is(.gn-action-visual, .gn-forward-disc),
+  .direct-navigation .device .gn-project-navigation .gn-nav-art,
+  .direct-navigation .device .entry-keypad button,
+  .direct-navigation .assessment-end-actions button {
+    transition: scale var(--motion-release) var(--motion-ease-enter);
+  }
+
+  .direct-navigation .device button:not(:disabled):active > :is(.gn-action-visual, .gn-forward-disc, .gn-nav-art),
+  .direct-navigation .device .entry-keypad button:active,
+  .direct-navigation .assessment-end-actions button:active {
+    scale: .978;
+    transition: scale var(--motion-press) var(--motion-ease-press);
+  }
+}
+
+.direct-navigation .assessment-end-dialog[open]::backdrop {
+  animation: direct-backdrop var(--motion-enter) var(--motion-ease-enter) both;
+}
+
+@keyframes direct-backdrop {
+  from { opacity: .45; }
+  to { opacity: 1; }
+}
+
+.direct-navigation .device-main [data-report-activity] {
+  position: relative;
+  overflow: hidden;
+}
+
+.direct-navigation .device-main [data-report-activity]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 20%, #d7096060 48%, transparent 76%);
+  animation: direct-report-activity 1450ms linear 3 both;
+}
+
+@keyframes direct-report-activity {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .direct-navigation .assessment-end-dialog[open]::backdrop,
+  .direct-navigation .device-main [data-report-activity]::after {
+    animation: none;
+  }
+}

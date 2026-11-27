@@ -1,0 +1,475 @@
+.mo-flow-review {
+  --review-ink: #f5f5f5;
+  --review-dim: #bfc2c8;
+  --review-rule: #46505c;
+  --review-pink: #ef0a6a;
+  --review-font: ANOVATORChrome, MiSans, sans-serif;
+}
+.mo-flow-review body { color: var(--review-ink); background: #111214; font-family: var(--review-font); }
+.mo-flow-review :is(.topbar, .tabs, .context-strip, .workspace > .sidebar, .workspace > .aside,
+  .scenario-launcher, #baseline-link, .footnote) { display: none; }
+.mo-flow-review .workspace {
+  display: block;
+  width: min(100%, 700px);
+  margin-inline: auto;
+  padding: 14px 20px 24px;
+}
+.mo-flow-review .screen-caption,
+.mo-flow-review .screen-note,
+.mo-flow-review .workspace > main > .review-panel,
+.mo-flow-review .workspace > main > .entry-options {
+  width: 100%;
+  max-width: min(540px, calc(56.25svh - 28px));
+  margin-inline: auto;
+}
+.mo-flow-review .screen-caption { color: var(--review-dim); margin-bottom: 10px; }
+.mo-flow-review .screen-caption button { min-height: 32px; padding: 5px 12px; }
+.mo-flow-review .device-viewport {
+  max-width: min(540px, calc(56.25svh - 28px));
+  outline-color: #35373a;
+  background: #000;
+}
+.mo-flow-review .device-stage { justify-content: center; }
+.mo-flow-review .screen-note { color: var(--review-dim); font-size: 12px; }
+.mo-flow-review .workspace > main > :is(.review-panel, .entry-options) {
+  position: static;
+  font-size: 12px;
+  background: #1d1f23;
+  border: 1px solid #383b43;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+}
+.mo-flow-review .review-panel :is(p, label, legend, pre) { color: var(--review-dim); }
+.mo-flow-review .review-panel button, .mo-flow-review .entry-options button { color: #18191b; }
+.mo-flow-review .review-panel .primary { color: #fff; }
+.mo-flow-review .screen-fullscreen :is(.screen-note, .workspace > main > .entry-options) { display: none; }
+.mo-flow-review .screen-fullscreen .workspace { width: 100%; padding: 0; }
+.mo-flow-review .screen-fullscreen .device-viewport { max-width: none; }
+
+/* ID-01. Typography and open keypad follow CAL-01 in the current review file. */
+.device:has(.review-standby) .device-main { padding: 0; overflow: hidden; background: #000; }
+.device:has(.review-standby) .device-bottom { display: none; }
+.review-standby {
+  position: relative;
+  isolation: isolate;
+  width: 360px;
+  height: 592px;
+  transform: scale(1.5);
+  transform-origin: top left;
+}
+.review-standby > img, .review-entry-film {
+  position: absolute;
+  z-index: -1;
+  top: -48px;
+  left: 0;
+  width: 360px;
+  height: 640px;
+  display: block;
+  object-fit: cover;
+  pointer-events: none;
+}
+.review-entry-film { z-index: -1; opacity: 0; }
+.review-entry-film.is-playing { opacity: 1; }
+.review-standby .review-entry-film, .entry-screen .review-entry-film { z-index: -1; }
+.review-standby > img, .entry-screen .entry-mo { z-index: -2; }
+.entry-screen:has(.review-entry-film.is-playing)::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(90deg, #0009 0%, #0006 43%, transparent 72%),
+    linear-gradient(0deg, #000 0%, #000b 11%, #0003 52%, transparent 100%);
+  pointer-events: none;
+}
+.device .review-standby [data-action="start"] {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-items: end;
+  padding: 0 0 32px;
+  border: 0;
+  border-radius: 0;
+  background: linear-gradient(0deg, #000 0%, #0009 11%, transparent 32%);
+  color: var(--review-ink);
+  font: 400 14px/20px var(--review-font);
+}
+.device .review-standby [data-action="start"]:focus-visible { outline: 1px solid #fff; outline-offset: -8px; }
+.mo-flow-review .entry-intro { top: 46px; left: 24px; }
+.mo-flow-review .entry-intro p { margin: 0 0 4.33px; font: 400 8px/10.67px var(--review-font); }
+.mo-flow-review .device-main .entry-intro h1 {
+  margin: 0; letter-spacing: 0; color: #e7eaed; font: 400 24.67px/32px var(--review-font);
+}
+.mo-flow-review .entry-field { top: 229px; font: 400 8px/10.67px var(--review-font); gap: 3px; text-transform: uppercase; }
+.mo-flow-review .device .entry-field input {
+  height: 43px;
+  min-height: 43px;
+  padding: 0 0 4px;
+  letter-spacing: 0;
+  text-transform: none;
+  caret-color: var(--review-pink);
+  font: 700 29.33px/37.33px var(--review-font);
+  font-variant-numeric: tabular-nums;
+  border-bottom: 0.67px solid #6f7187;
+}
+.mo-flow-review .entry-keypad { top: 300px; column-gap: 6px; }
+.mo-flow-review .device .entry-keypad button {
+  font: 400 20.67px/26px var(--review-font);
+}
+.mo-flow-review .device .entry-keypad button:hover { background: transparent; }
+.mo-flow-review .device .entry-keypad button:active { color: var(--review-pink); }
+.mo-flow-review .entry-keypad button > img { width: 21.33px; height: 21.33px; vertical-align: middle; }
+.mo-flow-review .entry-actions { left: 16px; right: 16px; top: 544px; }
+.mo-flow-review .device .entry-actions button {
+  display: flex; align-items: center; justify-content: flex-start; gap: 5px;
+  min-height: 40px; height: 40px; padding: 0 22px;
+  font: 400 11px/16px var(--review-font); border-radius: 0;
+}
+.mo-flow-review .device .entry-actions .primary { padding: 0; width: 140px; background: none; }
+.mo-flow-review .device .entry-actions .primary > span {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; height: 32px; border-radius: 15px; background: var(--review-pink);
+  font: 700 12px/16px var(--review-font);
+}
+.mo-flow-review .entry-actions img { width: 16px; height: 16px; }
+.mo-flow-review .device .hub-title { font-size: 24px; line-height: 36px; }
+
+/* The current workbench's authorization and profile forms use the same type system as the device. */
+.device[data-review-page="consent"] .device-main,
+.device[data-review-page="profile"] .device-main,
+.device[data-review-page="prerequisites"] .device-main {
+  background: #000;
+  color: var(--review-ink);
+  font-family: var(--review-font);
+  font-size: 21px;
+  line-height: 30px;
+  padding: 24px 36px;
+}
+.device:is([data-review-page="consent"], [data-review-page="profile"], [data-review-page="prerequisites"]) .device-main h1 {
+  font: 700 36px/54px var(--review-font);
+  margin: 0 0 12px;
+}
+.device:is([data-review-page="consent"], [data-review-page="profile"], [data-review-page="prerequisites"]) .device-main h1 + p {
+  font: 400 21px/30px var(--review-font);
+  color: var(--review-dim);
+}
+.device:is([data-review-page="consent"], [data-review-page="profile"], [data-review-page="prerequisites"]) .device-main button {
+  color: var(--review-ink);
+  background: #101014;
+  border: 1px solid #46464d;
+}
+.device:is([data-review-page="consent"], [data-review-page="profile"], [data-review-page="prerequisites"]) .device-main .primary {
+  background: var(--review-pink);
+  border-color: var(--review-pink);
+}
+.device:is([data-review-page="profile"], [data-review-page="prerequisites"]) .device-main :is(input, select) {
+  background: #141419;
+  color: var(--review-ink);
+  border-color: #505057;
+  font: 400 21px/30px var(--review-font);
+}
+.device:is([data-review-page="consent"], [data-review-page="profile"]) .device-main .screen-identity {
+  color: var(--review-dim);
+}
+.device[data-review-page="profile"] .device-main .form-grid { max-width: none; }
+
+/* GUIDE v04, common 503px body area. */
+.mo-flow-review .device-main .body-title {
+  padding: 0 24px;
+  font-size: 24px;
+  line-height: 36px;
+  letter-spacing: 0;
+}
+.mo-flow-review .body-screen[data-body-stage="guide"] .body-title { padding-top: 8px; }
+.mo-flow-review .device-main .body-guide-title {
+  position: absolute; left: 24px; top: 54px;
+  margin: 0; font-size: 20px; line-height: 28px;
+}
+.mo-flow-review .body-position {
+  position: absolute; inset: 92px 24px auto; display: block;
+  height: 184px; min-height: 0; margin: 0;
+}
+.mo-flow-review .body-position ul {
+  position: absolute; left: 140px; top: 4px; width: 172px; display: grid; gap: 16px;
+}
+.mo-flow-review .body-position :is(strong, span) {
+  font-size: 14px; line-height: 20px; white-space: pre-line;
+}
+.mo-flow-review .body-position span { margin-top: 2px; }
+.mo-flow-review .body-chapter {
+  position: absolute; inset: 288px 24px auto; min-height: 188px; margin: 0;
+  border-color: var(--review-rule);
+}
+.mo-flow-review .body-chapter-copy { padding-top: 23px; }
+.mo-flow-review .body-chapter-copy .body-guide-index { font-size: 12px; line-height: 16px; }
+.mo-flow-review .device-main .body-chapter h3 {
+  margin: 24px 0 0; width: 146px; white-space: pre-line; font-size: 20px; line-height: 28px;
+}
+.mo-flow-review .body-chapter > img {
+  right: -3px; top: 47px; bottom: auto; width: 195px; height: 139px;
+}
+.mo-flow-review .body-guide-tabs {
+  position: absolute; inset: 465px 24px auto; height: 25px; margin: 0; gap: 0;
+}
+.mo-flow-review .body-guide-tabs::before, .mo-flow-review .body-guide-tabs::after {
+  content: ''; position: absolute; inset: 12px 0 auto; height: 1px; pointer-events: none;
+}
+.mo-flow-review .body-guide-tabs::before { background: var(--review-rule); }
+.mo-flow-review .body-guide-tabs::after { background: var(--review-pink); transform: scaleX(0); transform-origin: left; }
+.mo-flow-review .body-screen[data-guide-manual="false"] .body-guide-tabs::after { animation: review-guide-time 6s linear both; }
+.mo-flow-review .body-screen:is([data-guide-step="2"], [data-guide-step="3"]) .body-guide-tabs::after { animation-duration: 8s; }
+.mo-flow-review .device .body-guide-tabs button { min-height: 25px; z-index: 1; }
+.mo-flow-review .body-guide-tabs button span { visibility: hidden; }
+.mo-flow-review .body-resume-note { position: absolute; left: 24px; top: 485px; margin: 0; line-height: 16px; }
+@keyframes review-guide-time { to { transform: scaleX(1); } }
+
+/* GUIDE v04 measuring. The edge-light film keeps the full 9:16 frame behind the reading plane. */
+.mo-flow-review .body-measure-media { top: -48px; bottom: auto; height: 640px; }
+.mo-flow-review .body-measure-media :is(img, video) { object-fit: cover; object-position: center; }
+.mo-flow-review .body-measure-media::after {
+  background: linear-gradient(180deg, #0008 0%, transparent 25% 43%, #0003 57%, #000d 100%);
+}
+.mo-flow-review .body-screen[data-body-stage="measure"]::before {
+  content: ''; position: absolute; inset: 224px 0 0; z-index: -1;
+  backdrop-filter: blur(4px);
+  background: linear-gradient(180deg, #04050800, #04050899 34%, #04050899);
+  mask-image: linear-gradient(180deg, transparent, #000 28%);
+}
+.mo-flow-review .body-measure-copy { top: 260px; }
+.mo-flow-review .device-main .body-measure-copy .body-title {
+  padding: 0; margin: 0; font-size: 12px; line-height: 16px; color: var(--review-dim);
+}
+.mo-flow-review .device-main .body-measure-copy h2 { font-size: 28px; line-height: 40px; }
+.mo-flow-review .body-measure-copy p { margin-top: 8px; font-size: 14px; line-height: 20px; color: var(--review-dim); }
+.mo-flow-review .review-topic-heading { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.mo-flow-review .review-topic-heading img { flex: none; width: 24px; height: 24px; }
+.mo-flow-review :is(.review-capture-status, .review-capture-hint) {
+  position: absolute; inset-inline: 24px; margin: 0; text-align: center; color: var(--review-dim);
+}
+.mo-flow-review .review-capture-status { top: 374px; font-size: 12px; line-height: 16px; }
+.mo-flow-review .review-capture-hint { top: 454px; font-size: 14px; line-height: 20px; }
+.mo-flow-review .body-capture-cue {
+  left: 158px; top: 398px; width: 44px; height: 44px;
+  display: grid; place-items: center; border: 0; animation: none; pointer-events: none;
+}
+.mo-flow-review .body-capture-cue svg {
+  position: absolute; inset: 0; display: block; width: 100%; height: 100%; transform: rotate(-90deg);
+}
+.mo-flow-review :is(.review-capture-track, .review-capture-value),
+.mo-flow-review .review-measure-entry path {
+  fill: none; stroke: var(--review-pink); stroke-width: .9; stroke-linecap: round;
+}
+.mo-flow-review .review-capture-track { stroke: var(--review-dim); opacity: .25; }
+.mo-flow-review .body-capture-cue:not([aria-valuenow]) .review-capture-track {
+  animation: review-quiet-signal 3s ease-in-out infinite;
+}
+@keyframes review-quiet-signal { 0%, 100% { opacity: .15; } 50% { opacity: .38; } }
+.mo-flow-review .body-capture-cue:not([aria-valuenow]) .review-capture-value { opacity: 0; }
+.mo-flow-review .review-capture-percent {
+  display: flex; align-items: baseline; gap: 1px; color: var(--review-ink);
+  font-size: 18px; line-height: 22px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.mo-flow-review .review-capture-percent small { color: var(--review-dim); font-size: 9px; font-weight: 400; }
+.mo-flow-review .review-capture-percent.is-three-digit { font-size: 16px; }
+.mo-flow-review .review-capture-percent.is-three-digit small { font-size: 8px; }
+.mo-flow-review .body-capture-cue:not([aria-valuenow]) .review-capture-percent {
+  color: var(--review-dim); font-size: 14px; font-weight: 400;
+}
+.mo-flow-review .device[data-body-entry] .body-capture-cue { opacity: var(--entry-ring, 0); }
+.mo-flow-review .device[data-body-entry] .body-measure-copy { opacity: var(--entry-copy, 0); }
+.mo-flow-review .device[data-body-entry] .review-capture-status { opacity: var(--entry-status, 0); }
+.mo-flow-review .device[data-body-entry] .review-capture-hint { opacity: var(--entry-hint, 0); }
+.mo-flow-review .device[data-body-entry] .body-measure-media { opacity: var(--entry-film, 0); }
+.mo-flow-review .device[data-body-entry] .gn-navigation-row { opacity: var(--entry-nav, 1); }
+.mo-flow-review .review-guide-outgoing {
+  position: absolute; inset: 0; z-index: 4; background: #000; pointer-events: none;
+}
+.mo-flow-review .review-measure-entry {
+  position: absolute; inset: 0 auto auto 0; z-index: 6; width: 360px; height: 640px;
+  transform: scale(1.5); transform-origin: top left; pointer-events: none;
+}
+.mo-flow-review .review-measure-entry svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mo-flow-review .review-measure-entry .gn-action-visual {
+  position: absolute; left: 0; top: 0; display: flex; align-items: center; justify-content: center;
+  gap: 6px; border-radius: 100px; background: var(--review-pink); color: var(--review-ink);
+  font-size: 12px; line-height: 16px; font-weight: 700; white-space: nowrap;
+}
+.mo-flow-review .review-measure-entry .gn-action-visual > * { opacity: var(--start-label, 1); }
+.mo-flow-review .device[data-review-page="measure/body"] .gn-settings.chrome-service-hidden { visibility: visible; opacity: .25; }
+
+.mo-flow-review .device .device-bottom .gn-action-row:has(.gn-secondary:is([data-action="retest"],[data-action="return-reading"],[data-action="return-to-task"])) { gap: 8px; }
+.mo-flow-review .device .device-bottom .gn-task-native .gn-result-actions {
+  display: grid; grid-template-columns: 88px 84px 140px; gap: 8px;
+}
+.mo-flow-review .device .device-bottom .gn-result-actions .gn-session { grid-column: 1; }
+.mo-flow-review .device .device-bottom .gn-result-actions > :is(.gn-primary,.gn-forward) { grid-column: 3; }
+.mo-flow-review .device .device-bottom .gn-result-actions:not(:has(.gn-secondary)) > .gn-forward {
+  grid-column: 2 / 4; justify-self: end; width: max-content; min-width: 140px; max-width: 176px;
+}
+.mo-flow-review .device .device-bottom .gn-result-actions .gn-secondary {
+  grid-column: 2; width: 84px; min-width: 0; gap: 3px;
+}
+.mo-flow-review .device .device-bottom .gn-result-actions .gn-forward-copy strong { line-height: 13px; }
+.mo-flow-review .device .device-bottom .gn-secondary:is([data-action="retest"],[data-action="return-reading"],[data-action="return-to-task"]) {
+  flex: 0 0 84px; width: 84px; gap: 3px;
+}
+.mo-flow-review .device .device-bottom :is(.gn-result-actions .gn-secondary,.gn-secondary:is([data-action="retest"],[data-action="return-reading"],[data-action="return-to-task"])) > span:last-child {
+  flex: 0 1 auto; min-width: 0; line-height: 13px; white-space: normal; text-align: left;
+}
+.mo-flow-review .pose-local-back { left: auto; right: 20px; }
+.mo-flow-review .device.oxygen-screen[data-oxygen-stage="result"] > .device-bottom { bottom: 78px; height: 55.5px; }
+.mo-flow-review .device.oxygen-screen.direct-project-rail > .device-bottom {
+  bottom: 78px;
+  height: 55.5px;
+  transition: none;
+}
+
+/* Current 11-item overview and focus. */
+.mo-flow-review [data-tone="above"] { --band: #ee8c75; }
+.mo-flow-review [data-tone="within"] { --band: #7cd6b8; }
+.mo-flow-review [data-tone="below"] { --band: #8ca8ed; }
+.mo-flow-review [data-tone="value"] { --band: #dfe3ea; }
+.mo-flow-review .body-overview-art {
+  left: 15px; right: auto; top: -73px; width: 362px; height: 644px;
+  opacity: 1; mask-image: none; z-index: -2;
+}
+.mo-flow-review .body-screen[data-body-stage="overview"]::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(90deg, #0002, #0004 40%, #0005 72%, transparent),
+    linear-gradient(0deg, #000 0%, #0007 12%, transparent 21%);
+  opacity: var(--review-overview-shade, 1);
+  pointer-events: none;
+}
+.mo-flow-review .review-capture-outgoing { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.mo-flow-review .review-capture-badge {
+  width: 42px; height: 42px; animation: review-capture-complete .38s cubic-bezier(.2,.9,.3,1.15) both;
+}
+@keyframes review-capture-complete { from { opacity: 0; transform: scale(.82); } to { opacity: 1; transform: scale(1); } }
+.mo-flow-review .review-result-arrival {
+  position: absolute; left: 118px; top: -47px; width: 288px; height: 512px;
+  z-index: -2; opacity: 0; pointer-events: none;
+}
+.mo-flow-review .review-result-arrival :is(img, video) { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mo-flow-review .review-result-arrival img,
+.mo-flow-review .review-result-arrival[data-fallback] video { visibility: hidden; }
+.mo-flow-review .review-result-arrival[data-fallback] img { visibility: visible; }
+.mo-flow-review .body-results-meta { margin: 8px 24px 0; line-height: 16px; }
+.mo-flow-review .review-legend {
+  position: absolute; inset: 68px 24px auto; display: flex;
+  gap: 8px; margin: 0; padding: 0; list-style: none;
+  color: var(--review-ink); font-size: 11px; line-height: 16px;
+}
+.mo-flow-review .review-legend li { display: flex; align-items: center; gap: 4px; width: 64px; white-space: nowrap; }
+.mo-flow-review .review-legend i { width: 12px; height: 2px; border-radius: 1px; background: var(--band); }
+.mo-flow-review .review-overview-tabs { display: none; }
+.mo-flow-review .body-metric-list { position: absolute; inset: 100px auto auto 24px; margin: 0; }
+.mo-flow-review .device .body-metric-row {
+  display: block; position: relative; width: 252px; height: 34px; min-height: 34px;
+  border: 0; margin: 0; padding: 0; font-size: 12px; line-height: 16px;
+}
+.mo-flow-review .device .body-metric-row[data-review-returned] { background: #ffffff06; }
+.mo-flow-review .device .body-metric-row:active { background: #ffffff11; }
+.mo-flow-review .body-metric-row > img { position: absolute; object-fit: contain; }
+.mo-flow-review .body-metric-row > span:first-of-type { position: absolute; left: 40px; top: 4px; }
+.mo-flow-review .body-metric-value {
+  position: absolute; right: 0; top: 2px; gap: 4px;
+  font-size: 14px; line-height: 20px;
+}
+.mo-flow-review .body-metric-value strong { font-size: 14px; }
+.mo-flow-review .body-metric-value small { min-width: 0; font-size: 12px; font-weight: 400; color: var(--review-ink); }
+.mo-flow-review .body-metric-value .unit-percent { margin-left: -4px; font-size: 14px; font-weight: 700; }
+.mo-flow-review .review-result-line {
+  position: absolute; left: 40px; right: 0; top: 24px; height: 1px; background: #c9c9cb;
+}
+.mo-flow-review .review-result-line i {
+  position: absolute; left: 0; top: -2px; height: 4px; background: var(--band);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--band), transparent 52%);
+}
+.mo-flow-review .body-more { position: relative; margin: 420px 24px 0; }
+.mo-flow-review .body-more summary { min-height: 24px; }
+.mo-flow-review .body-wrap:has(.body-more[open]) { height: 1090px; }
+.mo-flow-review .body-focus-art {
+  inset: -48px auto auto 0; width: 360px; height: 640px; opacity: 1;
+  mask-image: url('review-assets/focus-body-mask.svg');
+  mask-size: 360px 640px; mask-repeat: no-repeat;
+}
+.mo-flow-review .body-wrap:has(> [data-body-stage="focus"]) { height: 810px; }
+.mo-flow-review .body-screen[data-body-stage="focus"] { height: 540px; touch-action: none; user-select: none; }
+.mo-flow-review .body-tabs {
+  top: 38px; gap: 16px; width: 113px; font-size: 12px; line-height: 16px;
+}
+.mo-flow-review .device .body-tabs button,
+.mo-flow-review .body-tabs [aria-current] {
+  min-height: 23px; padding: 0; font-size: 12px; line-height: 16px;
+}
+.mo-flow-review .body-tabs [aria-current] { font-weight: 700; box-shadow: 0 1px #f5f5f5; }
+.mo-flow-review .body-focus-value { left: 32px; right: 52px; top: 112px; }
+.mo-flow-review .body-focus-value > img { position: relative; left: -5px; width: 35px; height: 36px; margin-bottom: 4px; object-fit: contain; }
+.mo-flow-review .device-main .body-focus-value h2 { font-size: 18px; line-height: 24px; }
+.mo-flow-review .body-reading { height: 68px; margin: 4px 0; gap: 4px; }
+.mo-flow-review .body-reading strong { font-size: 57px; line-height: 68px; }
+.mo-flow-review .body-reading small { font-size: 23px; color: var(--review-ink); }
+.mo-flow-review .body-reading .unit-percent { margin-left: -3px; font-size: 32px; font-weight: 700; }
+.mo-flow-review .body-focus-source { font-size: 12px; line-height: 16px; font-weight: 700; color: var(--band); }
+.mo-flow-review .review-focus-plot {
+  position: absolute; inset: 0; width: 360px; height: 503px; pointer-events: none;
+  color: var(--band); overflow: visible;
+}
+.mo-flow-review .review-focus-axis { fill: none; stroke: #92959c; stroke-width: .833; }
+.mo-flow-review .review-focus-ticks { fill: var(--review-ink); font-size: 12px; }
+.mo-flow-review .body-focus-rail { right: 0; top: 99px; gap: .667px; padding-inline: 4px 7px; z-index: 1; touch-action: none; }
+.mo-flow-review .device .body-focus-rail button {
+  position: relative; width: 36px; height: 34px; min-height: 34px; padding: 0;
+  opacity: 1; border-radius: 0; background: none;
+}
+.mo-flow-review .body-focus-rail button img { width: 15px; height: 15px; object-fit: contain; opacity: .54; }
+.mo-flow-review .body-focus-rail button[aria-pressed="true"] img { width: 21px; height: 21px; opacity: 1; }
+.mo-flow-review .device .body-focus-rail button[aria-pressed="true"] { background: none; }
+.mo-flow-review .body-focus-rail button[data-review-pending]:not([aria-pressed="true"]) img { opacity: .7; }
+.mo-flow-review .body-focus-rail button[aria-pressed="true"]::before {
+  content: ''; position: absolute; left: 2px; top: 8px; height: 18px; width: 1px; background: #dfe3ea;
+}
+.mo-flow-review .body-focus-rail button:is([data-tone="above"], [data-tone="below"])::after {
+  content: ''; position: absolute; right: 1px; top: 16px; width: 2px; height: 2px;
+  border-radius: 50%; background: var(--band);
+}
+.mo-flow-review .review-metric-position { position: absolute; left: 32px; top: 464px; margin: 0; font-size: 11px; line-height: 16px; color: var(--review-dim); }
+
+.mo-flow-review .review-focus-scrub { position: absolute; inset: 0; z-index: -1; isolation: isolate; pointer-events: none; }
+.mo-flow-review [data-review-browsing]:has(> .review-focus-scrub:not([hidden])) > .body-focus-art { visibility: hidden; }
+.mo-flow-review [data-review-browsing] .body-focus-rail::before {
+  content: ''; position: absolute; left: 6px; top: var(--review-rail-y); width: 1px; height: 18px;
+  background: #dfe3ea; pointer-events: none;
+}
+.mo-flow-review [data-review-browsing] .body-focus-rail button[aria-pressed] img {
+  width: calc(15px + 6px * var(--review-index-weight, 0));
+  height: calc(15px + 6px * var(--review-index-weight, 0));
+  opacity: calc(.54 + .46 * var(--review-index-weight, 0));
+}
+.mo-flow-review [data-review-browsing] .body-focus-rail button[aria-pressed]::before { visibility: hidden; }
+.mo-flow-review .body-screen[data-review-motion="focus"]:not([data-review-rail-ready]) > .body-focus-rail { visibility: hidden; }
+.mo-flow-review .body-screen[data-review-motion="return"] > .body-metric-list { pointer-events: none; }
+
+.mo-flow-review .body-screen[data-review-motion] > :is(.body-overview-art, .body-focus-art,
+  .body-results-meta, .review-legend, .body-metric-list, .body-more, .body-focus-value,
+  .review-focus-plot, .body-focus-rail, .review-metric-position) { opacity: 0; }
+.mo-flow-review .body-screen[data-review-motion]::before { opacity: 0; }
+.mo-flow-review .review-body-motion { position: absolute; inset: 0; z-index: 0; pointer-events: none; isolation: isolate; }
+.mo-flow-review .review-motion-portraits { position: absolute; inset: 0; z-index: -1; isolation: isolate; }
+.mo-flow-review .review-body-replica { position: absolute; inset: 0; height: 503px; transform: none; }
+.mo-flow-review .review-body-replica > :is(.body-title, .body-tabs) { visibility: hidden; }
+.mo-flow-review .review-body-move-label,
+.mo-flow-review .review-body-move-icon { position: absolute; z-index: 2; }
+.mo-flow-review .review-body-move-label { color: var(--review-ink); font-weight: 700; white-space: nowrap; }
+.mo-flow-review .review-body-move-icon { object-fit: contain; }
+.mo-flow-review .review-moving-axis { z-index: 2; }
+.mo-flow-review .review-moving-axis path { stroke-linecap: round; stroke-linejoin: round; }
+.mo-flow-review .review-moving-signal { fill: none; stroke: currentColor; stroke-width: 4; }
+.mo-flow-review .review-motion-hide-dots button::after { visibility: hidden; }
+
+@media (max-width: 600px) {
+  .mo-flow-review .workspace { padding-inline: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mo-flow-review .body-guide-tabs::after,
+  .mo-flow-review :is(.review-capture-track, .review-capture-badge) { animation: none !important; }
+}

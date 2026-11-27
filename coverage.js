@@ -1,0 +1,1 @@
+globalThis.ANOVATOR_COVERAGE = [];

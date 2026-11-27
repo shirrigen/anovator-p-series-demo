@@ -1,0 +1,34 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="360" height="490" viewBox="0 0 360 490" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="22 / Side v06 diagram">
+<path id="Landmark isolation" opacity="0.9" d="M185 170L176 197L173 213V269M173 269V307L175 378L174 441M173 269L189 315" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke="black"/>
+<path id="Landmark connection / shared v06" opacity="0.94" d="M185 170L184.679 170.964M173 269V268M173 269V269.95M173 269L173.333 269.958M174 441L174.016 440.016M189 315L188.667 314.042M173 266V264M173 262V260M173 258V256M173 254V252M173 250V248M173 246V244M173 242V240M173 238V236M173 234V232M173 230V228M173 226V224M173 222V220M173 218V216M173 214V213L173.188 212M173.562 210L173.938 208M174.312 206L174.688 204M175.062 202L175.438 200M175.813 198L176 197L176.321 196.036M176.964 194.107L177.607 192.179M178.25 190.25L178.893 188.321M179.536 186.393L180.179 184.464M180.821 182.536L181.464 180.607M182.107 178.679L182.75 176.75M183.393 174.821L184.036 172.893M173 271.85V273.75M173 275.65V277.55M173 279.45V281.35M173 283.25V285.15M173 287.05V288.95M173 290.85V292.75M173 294.65V296.55M173 298.45V300.35M173 302.25V304.15M173 306.05V307L173.028 307.986M173.083 309.958L173.139 311.931M173.194 313.903L173.25 315.875M173.306 317.847L173.361 319.819M173.417 321.792L173.472 323.764M173.528 325.736L173.583 327.708M173.639 329.681L173.694 331.653M173.75 333.625L173.806 335.597M173.861 337.569L173.917 339.542M173.972 341.514L174.028 343.486M174.083 345.458L174.139 347.431M174.194 349.403L174.25 351.375M174.306 353.347L174.361 355.319M174.417 357.292L174.472 359.264M174.528 361.236L174.583 363.208M174.639 365.181L174.694 367.153M174.75 369.125L174.806 371.097M174.861 373.069L174.917 375.042M174.972 377.014L175 378L174.984 378.984M174.953 380.953L174.922 382.922M174.891 384.891L174.859 386.859M174.828 388.828L174.797 390.797M174.766 392.766L174.734 394.734M174.703 396.703L174.672 398.672M174.641 400.641L174.609 402.609M174.578 404.578L174.547 406.547M174.516 408.516L174.484 410.484M174.453 412.453L174.422 414.422M174.391 416.391L174.359 418.359M174.328 420.328L174.297 422.297M174.266 424.266L174.234 426.234M174.203 428.203L174.172 430.172M174.141 432.141L174.109 434.109M174.078 436.078L174.047 438.047M174 271.875L174.667 273.792M175.333 275.708L176 277.625M176.667 279.542L177.333 281.458M178 283.375L178.667 285.292M179.333 287.208L180 289.125M180.667 291.042L181.333 292.958M182 294.875L182.667 296.792M183.333 298.708L184 300.625M184.667 302.542L185.333 304.458M186 306.375L186.667 308.292M187.333 310.208L188 312.125" stroke-linecap="round" stroke-linejoin="round" stroke="#F5F5F5"/>
+<circle id="Isolation / head" cx="185" cy="170" r="6" fill="black"/>
+<circle id="Landmark / head" cx="185" cy="170" r="3.5" fill="black" stroke="#F5F5F5"/>
+<circle id="Landmark core / head" cx="185" cy="170" r="1" fill="#F5F5F5"/>
+<circle id="Isolation / neck" cx="176" cy="197" r="5" fill="black"/>
+<circle id="Landmark / neck" cx="176" cy="197" r="3.5" fill="black" stroke="#F5F5F5"/>
+<circle id="Landmark core / neck" cx="176" cy="197" r="1" fill="#F5F5F5"/>
+<circle id="Isolation / shoulder" cx="173" cy="213" r="6" fill="black"/>
+<circle id="Landmark / shoulder" cx="173" cy="213" r="3.5" fill="black" stroke="#F5F5F5"/>
+<circle id="Landmark core / shoulder" cx="173" cy="213" r="1" fill="#F5F5F5"/>
+<circle id="Isolation / elbow" cx="173" cy="269" r="5" fill="black"/>
+<circle id="Landmark / elbow" cx="173" cy="269" r="3.5" fill="black" stroke="#F5F5F5"/>
+<circle id="Landmark core / elbow" cx="173" cy="269" r="1" fill="#F5F5F5"/>
+<circle id="Isolation / wrist" cx="189" cy="315" r="5" fill="black"/>
+<circle id="Landmark / wrist" cx="189" cy="315" r="3.5" fill="black" stroke="#F5F5F5"/>
+<circle id="Landmark core / wrist" cx="189" cy="315" r="1" fill="#F5F5F5"/>
+<circle id="Isolation / pelvis" cx="173" cy="307" r="6" fill="black"/>
+<circle id="Landmark / pelvis" cx="173" cy="307" r="3.5" fill="black" stroke="#F5F5F5"/>
+<circle id="Landmark core / pelvis" cx="173" cy="307" r="1" fill="#F5F5F5"/>
+<circle id="Isolation / knee" cx="175" cy="378" r="6" fill="black"/>
+<circle id="Landmark / knee" cx="175" cy="378" r="3.5" fill="black" stroke="#F5F5F5"/>
+<circle id="Landmark core / knee" cx="175" cy="378" r="1" fill="#F5F5F5"/>
+<circle id="Isolation / ankle" cx="174" cy="441" r="5" fill="black"/>
+<circle id="Landmark / ankle" cx="174" cy="441" r="3.5" fill="black" stroke="#F5F5F5"/>
+<circle id="Landmark core / ankle" cx="174" cy="441" r="1" fill="#F5F5F5"/>
+<path id="Posture relation / Forward head" opacity="0.9" d="M119 168H137C153 168 165 170 179 170" stroke-linecap="round" stroke-linejoin="round" stroke="#BABCC0"/>
+<path id="Posture relation / Kyphosis" opacity="0.9" d="M119 250H134C149 250 151 223 167 213" stroke-linecap="round" stroke-linejoin="round" stroke="#BABCC0"/>
+<path id="Posture relation / Pelvis" opacity="0.9" d="M119 338H134C151 338 153 312 167 307" stroke-linecap="round" stroke-linejoin="round" stroke="#BABCC0"/>
+<path id="Posture relation / Knee" opacity="0.9" d="M119 423H135C150 423 155 391 169 378" stroke-linecap="round" stroke-linejoin="round" stroke="#BABCC0"/>
+</g>
+</svg>

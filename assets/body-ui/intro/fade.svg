@@ -1,0 +1,17 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="360" height="640" viewBox="0 0 360 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="&#229;&#134;&#133;&#229;&#174;&#185;&#233;&#152;&#133;&#232;&#175;&#187;&#230;&#184;&#144;&#233;&#154;&#144; / &#228;&#184;&#141;&#232;&#161;&#168;&#231;&#164;&#186;&#230;&#181;&#139;&#233;&#135;&#143;&#232;&#191;&#155;&#229;&#186;&#166;" clip-path="url(#clip0_0_549)">
+<path id="Vector" d="M360 0H0V640H360V0Z" fill="url(#paint0_linear_0_549)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_549" x1="0" y1="0" x2="0" y2="640" gradientUnits="userSpaceOnUse">
+<stop stop-opacity="0"/>
+<stop offset="0.35" stop-opacity="0"/>
+<stop offset="0.52" stop-opacity="0.96"/>
+<stop offset="0.65"/>
+<stop offset="1"/>
+</linearGradient>
+<clipPath id="clip0_0_549">
+<rect width="360" height="640" fill="white"/>
+</clipPath>
+</defs>
+</svg>

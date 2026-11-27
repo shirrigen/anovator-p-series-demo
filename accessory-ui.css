@@ -1,0 +1,310 @@
+/* Open-field preparations and live data from the hand-held peripherals. */
+.accessory-figure {
+  position: absolute;
+  z-index: -1;
+  left: 150px;
+  top: 82px;
+  width: 230px;
+  height: 345px;
+  object-fit: contain;
+  mask-image: linear-gradient(0deg, transparent, #000 17%);
+}
+.accessory-breath {
+  position: absolute;
+  top: 91px;
+  left: 24px;
+  width: 208px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  counter-reset: cue;
+}
+.accessory-breath li {
+  position: relative;
+  padding-left: 29px;
+  margin-bottom: 20px;
+  counter-increment: cue;
+}
+.accessory-breath li::before {
+  content: counter(cue, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.accessory-breath span {
+  color: #c6c6cc;
+  display: block;
+  font-size: 13px;
+  line-height: 19px;
+}
+.accessory-breath strong { display: block; max-width: 166px; font-size: 21px; line-height: 24px; }
+.device-main .accessory-screen[data-accessory="grip"][data-accessory-stage="ready"] .body-title {
+  position: absolute;
+  top: 8px;
+  left: 24px;
+  width: 220px;
+  padding: 0;
+  font-size: 20px;
+  line-height: 26px;
+  letter-spacing: 0;
+  font-weight: 700;
+}
+.grip-ready-figure {
+  position: absolute;
+  z-index: -1;
+  top: 34px;
+  left: 134px;
+  object-fit: contain;
+}
+.grip-ready-figure[data-hand="right"] { transform: scaleX(-1); }
+.grip-ready-intro, .grip-ready-stance {
+  position: absolute;
+  left: 24px;
+  display: grid;
+  gap: 2px;
+}
+.grip-ready-intro { top: 36px; width: 220px; }
+.grip-ready-stance { top: 140px; width: 170px; }
+.device-main :is(.grip-ready-intro, .grip-ready-stance) h2 {
+  margin: 0;
+  color: #f5f5f5;
+  font-weight: 700;
+}
+.device-main .grip-ready-intro h2 { font-size: 30px; line-height: 36px; }
+.device-main .grip-ready-stance h2 { font-size: 20px; line-height: 28px; }
+:is(.grip-ready-intro, .grip-ready-stance) p {
+  margin: 0;
+  color: #f5f5f5;
+  font-size: 13px;
+  line-height: 18px;
+}
+.accessory-side {
+  position: absolute;
+  top: 98px;
+  left: 24px;
+  display: flex;
+  gap: 22px;
+  height: 32px;
+}
+.device .accessory-side button {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 71px;
+  min-width: 71px;
+  height: 32px;
+  min-height: 32px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #f5f5f5;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+.device .accessory-side button[aria-pressed="true"] { font-weight: 700; }
+.device .accessory-side button[aria-pressed="true"]::after {
+  position: absolute;
+  inset: 25px 0 auto;
+  height: 1.5px;
+  background: #ef0a6a;
+  content: "";
+}
+.footer-h10 .accessory-screen[data-accessory-stage="ready"] .accessory-side {
+  gap: 6px;
+  height: 34px;
+}
+.footer-h10 .device .accessory-screen[data-accessory-stage="ready"] .accessory-side button {
+  align-items: center;
+  justify-content: center;
+  width: 82px;
+  min-width: 82px;
+  height: 34px;
+  min-height: 34px;
+  border: 1px solid #605f68;
+  border-radius: 6px;
+  background: #18181c;
+  color: #d2d1d8;
+  font-size: 13px;
+}
+.footer-h10 .device .accessory-screen[data-accessory-stage="ready"] .accessory-side button[aria-pressed="true"] {
+  border-color: #e75594;
+  background: #382732;
+  color: #f5f5f5;
+}
+.footer-h10 .device .accessory-screen[data-accessory-stage="ready"] .accessory-side button[aria-pressed="true"]::after {
+  content: none;
+}
+.accessory-screen[data-accessory="grip"][data-accessory-stage="ready"] .accessory-other {
+  inset: 126px 24px auto;
+  margin: 0;
+  font-size: 10px;
+  line-height: 12px;
+}
+.accessory-screen[data-accessory="grip"][data-accessory-stage="ready"] .accessory-other strong { display: inline; }
+.grip-ready-detail {
+  position: absolute;
+  top: 242px;
+  left: 9px;
+  width: 167px;
+  margin: 0;
+}
+.grip-ready-detail > div { position: relative; height: 167px; }
+.grip-ready-detail img { display: block; object-fit: contain; }
+.grip-ready-detail > div::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(#000, transparent 50%, #000);
+  content: "";
+}
+.grip-ready-detail figcaption {
+  position: absolute;
+  top: 168px;
+  left: 43px;
+  width: 130px;
+  color: #f5f5f5;
+  font-size: 10px;
+  line-height: 16px;
+}
+.grip-ready-connection, .grip-ready-cue {
+  position: absolute;
+  left: 24px;
+  margin: 0;
+  color: #f5f5f5;
+}
+.grip-ready-connection {
+  top: 438px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 700;
+}
+.grip-ready-connection img { flex: none; }
+.grip-ready-cue { top: 466px; width: 312px; font-size: 12px; line-height: 18px; }
+.grip-result-options {
+  position: absolute;
+  inset: auto 24px 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #c6c6cc;
+  font-size: 13px;
+  line-height: 18px;
+}
+.grip-result-options .accessory-side {
+  position: static;
+  height: 44px;
+  gap: 16px;
+}
+.device .grip-result-options .accessory-side button {
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  min-height: 44px;
+  font-size: 12px;
+}
+.device .grip-result-options .accessory-side button[aria-pressed="true"]::after { inset: auto 0 4px; }
+.grip-handoff-note {
+  position: absolute;
+  inset: auto 24px 32px;
+  margin: 0;
+  color: #f5f5f5;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+}
+.accessory-status {
+  position: absolute;
+  bottom: 15px;
+  left: 24px;
+  right: 24px;
+  color: #c6c6cc;
+  font-size: 13px;
+  line-height: 20px;
+}
+.accessory-screen[data-accessory-stage="ready"] .accessory-status { color: #f5f5f5; font-weight: 700; }
+.accessory-status small { display: block; font-size: 11px; font-weight: 400; color: #c6c6cc; }
+.accessory-connected { display: inline-grid; place-items: center; color: #131512; background: #a9dc58; border-radius: 50%; width: 13px; height: 13px; font-size: 10px; }
+.accessory-material {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  opacity: .83;
+  transform: scale(calc(.97 + .008 * var(--accessory-strength, 0)));
+}
+.accessory-material > img {
+  position: absolute;
+  top: -48px;
+  left: 0;
+  width: 360px;
+  height: 640px;
+  object-fit: fill;
+  clip-path: inset(153px 0 124px);
+  mask-image: linear-gradient(0deg, transparent 22%, #000 28%, #000 74%, transparent 80%);
+}
+.accessory-material > span {
+  position: absolute;
+  inset: 144px 8px 96px;
+  background: radial-gradient(ellipse at center, #080604 50%, #080604e6 57%, #08060400 74%);
+}
+.accessory-screen[data-accessory="grip"] .accessory-material > img { clip-path: inset(125px 0 149px); }
+.accessory-screen[data-accessory="grip"] .accessory-material > span { inset: 130px 48px 113px; }
+.accessory-screen[data-accessory="grip"] .accessory-material[data-motion="result"] { transform: scale(1.13,.94); }
+.accessory-material[data-motion="waiting"] { opacity: .47; }
+.accessory-material[data-motion="settling"], .accessory-material[data-motion="result"], .accessory-material[data-motion="stopping"] { opacity: .64; }
+.accessory-material[data-motion="live"] { animation: accessory-light .6s ease-out; }
+@keyframes accessory-light { from { opacity: .69; } to { opacity: .83; } }
+.direct-navigation .accessory-material[data-motion="live"] { animation: none; }
+.direct-navigation .accessory-screen[data-accessory="lung"] .accessory-material:is([data-motion="live"],[data-motion="settling"]) {
+  transform: scale(calc(.97 + .11 * var(--accessory-level)), calc(.97 + .052 * var(--accessory-level)));
+}
+.direct-navigation .accessory-screen[data-accessory="grip"] .accessory-material:is([data-motion="live"],[data-motion="settling"]) {
+  transform: scale(calc(1.05 - .09 * var(--accessory-level)), calc(.96 + .08 * var(--accessory-level)));
+}
+@media (prefers-reduced-motion: reduce) {
+  .direct-navigation .accessory-screen[data-accessory] .accessory-material { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .accessory-material[data-motion="live"] { animation: none; } }
+.accessory-phrase { margin: 12px 24px 0; max-width: 228px; font-size: 14px; line-height: 19px; color: #c6c6cc; }
+.accessory-screen > .accessory-reading {
+  position: absolute;
+  top: 202px;
+  left: 24px;
+  right: 24px;
+}
+.accessory-reading { text-align: center; }
+.device-main .accessory-reading h2 { margin: 0; color: #f5f5f5; font-size: 16px; line-height: 19px; }
+.footer-h10 .device-main .accessory-screen[data-accessory="grip"][data-accessory-stage="waiting"] .accessory-reading h2 {
+  font-size: 25px;
+  line-height: 32px;
+}
+.accessory-value { margin: 6px 0 0; }
+.accessory-value strong { font-variant-numeric: tabular-nums; font-size: 53px; line-height: 61px; }
+.accessory-value small { margin-left: 4px; font-size: 14px; color: #e7e5e8; }
+.accessory-peak {
+  position: absolute;
+  inset: 307px 24px auto;
+  margin: 0;
+  text-align: center;
+  color: #b4b3b8;
+  font-size: 12px;
+}
+.accessory-peak strong { display: block; margin-top: 3px; font-size: 15px; }
+.accessory-other { position: absolute; inset: auto 24px 60px; color: #c6c6cc; font-size: 13px; line-height: 18px; }
+.accessory-other strong { display: block; color: #f5f5f5; }
+.accessory-sides { position: absolute; top: 207px; left: 30px; right: 30px; display: grid; grid-template-columns: 1fr 1fr; }
+.accessory-sides .accessory-reading { min-height: 70px; }
+.accessory-sides .accessory-value strong { font-size: 41px; }
+.accessory-recovery { position: absolute; inset: 126px 24px auto; }
+.device-main .accessory-recovery h2 { margin: 0 0 8px; color: #f5f5f5; font-size: 25px; }
+.accessory-recovery p { max-width: 260px; color: #c6c6cc; font-size: 15px; line-height: 22px; }
