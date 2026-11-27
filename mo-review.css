@@ -32,16 +32,21 @@
 .mo-flow-review .device-stage { justify-content: center; }
 .mo-flow-review .screen-note { color: var(--review-dim); font-size: 12px; }
 .mo-flow-review .workspace > main > :is(.review-panel, .entry-options) {
-  position: static;
   font-size: 12px;
   background: #1d1f23;
   border: 1px solid #383b43;
   padding: 8px 12px;
   margin-bottom: 8px;
 }
+.mo-flow-review body:not(.screen-fullscreen) .workspace > main > :is(.review-panel, .entry-options) { position: static; }
+.mo-flow-review .screen-fullscreen .workspace > main > .review-panel { max-width: none; }
+.mo-flow-review .workspace > main > .review-confirm { color: #18191b; }
 .mo-flow-review .review-panel :is(p, label, legend, pre) { color: var(--review-dim); }
 .mo-flow-review .review-panel button, .mo-flow-review .entry-options button { color: #18191b; }
 .mo-flow-review .review-panel .primary { color: #fff; }
+.mo-flow-review #demo-controls > .wrap:not(:has(button)) { display: none; }
+.mo-flow-review #demo-controls .demo-mode { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.mo-flow-review #demo-controls .review-extra { margin-top: 14px; }
 .mo-flow-review .screen-fullscreen :is(.screen-note, .workspace > main > .entry-options) { display: none; }
 .mo-flow-review .screen-fullscreen .workspace { width: 100%; padding: 0; }
 .mo-flow-review .screen-fullscreen .device-viewport { max-width: none; }

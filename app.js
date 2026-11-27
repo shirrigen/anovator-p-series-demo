@@ -92,7 +92,7 @@ function heightRecordPage(){
  return title('身高记录','用于本次体成分分析。')+heightSummary(r,false)+(r?`<dl class="height-facts"><dt>记录来源</dt><dd>${esc(H.label(r.method))}${r.origin==='account'?' · 来自账号资料':''}</dd><dt>记录时间</dt><dd>${esc(time(r.recordedAt))}</dd><dt>使用时间</dt><dd>${esc(time(r.adoptedAt))}</dd></dl>`:info('还没有身高记录。'))+(H.automatic(state)?info('身高由设备测得，重新测量时会更新。'):state.admin?info('修改后将保存到账号。已有体成分结果需重新测量，历史记录不受影响。',true)+form('height-edit',field('height','身高 · cm',r?.value||'','number','step="0.1" min="0.1" required'),'保存修改'):info('需要修改身高，请联系工作人员。'))+(state.results.body?.needsReview?info('身高已修改，请重测体成分后再生成报告。',true)+b('重测人体成分','retest',{id:'body',returnRoute:'result/body'},'primary'):'')+`<div class="wrap task-actions">${b('返回','height-back')}</div>`;
 }
 function reviewNotice(){
- return (storageWarning?info(storageWarning,true):'')+(reviewConfirm?`<div class="review-confirm" role="alert"><strong>替换当前虚构会话？</strong><p>本次未归档的演示进度会重置；已保存的演示账号身高、历史和评审反馈保留。</p>${b('确认载入','confirm-review',{},'primary')}${b('保留当前','cancel-review')}</div>`:'');
+ return (storageWarning?info(storageWarning,true):'')+(reviewConfirm?`<div class="review-confirm" role="alert" lang="zh-CN"><strong>替换当前虚构会话？</strong><p>当前演示进度将重置。已保存的演示记录和评审反馈会保留。</p>${b('确认','confirm-review',{},'primary')}${b('保留当前','cancel-review')}</div>`:'');
 }
 function recentAccounts(){
  const ids=Object.keys(state.accounts).map(k=>{try{return JSON.parse(k);}catch{return [];}}).filter(([device])=>device===state.profileId).map(([,id])=>id).slice(-3);
@@ -772,7 +772,7 @@ function renderDirectory(){
    <h1 id="project-directory-title">All tests</h1>${progress}
    <div class="directory-filters" role="group" aria-label="Filter tests">${rangeButton('all','On device · '+active().length)}${rangeButton('recorded','With results · '+count)}</div>
    <div class="directory-viewport" role="region" aria-label="Tests" tabindex="0">${directoryRows(filter,scope.chosen)||'<p class="directory-empty">No records in this session.</p>'}</div>
-   <div class="directory-actions"><button type="button" class="directory-close" data-action="directory-close"><span>Close</span></button><span class="directory-scroll-hint" hidden>Swipe to browse</span></div>
+   <div class="directory-actions"><button type="button" class="directory-close" data-action="directory-close"><span>Close</span></button></div>
  </section>`;
 }
 function sessionOverview(){
@@ -1020,12 +1020,12 @@ function motionReview(){
  const active=state.acq;
  if(active?.pose?.detecting&&!state.stop&&state.route==='measure/posture'){
    return '<fieldset class="motion-review"><legend>人体识别事件（模拟）</legend>'+
-     b('识别到 ZERO 抠像','posture-detected',{acqId:active.id,participantId:state.user.id,view:active.pose.view},'small')+'</fieldset>';
+     b('确认识别到人体','posture-detected',{acqId:active.id,participantId:state.user.id,view:active.pose.view},'small')+'</fieldset>';
  }
  const q=state.acq?.motion;
  if(!q||state.stop||state.route==='recovery')return '';
  const choices=[];
- if(MOTION_FLOW.demoNext(q))choices.push(['下一步设备事件','next']);
+ if((!automaticDemo||!routeReview)&&MOTION_FLOW.demoNext(q))choices.push(['下一步设备事件','next']);
  if(q.id==='balance'&&q.phase==='holding')choices.push(['提前落脚','foot-down'],['追踪丢失','tracking-lost']);
  if(q.id==='shoulder'&&q.phase==='raising'||q.id==='pushups'&&q.phase==='repeating')choices.push(['追踪丢失','tracking-lost']);
  if(q.id==='jump'&&q.phase==='landing')choices.push(['本次落地无效','landing-invalid']);
@@ -1033,7 +1033,57 @@ function motionReview(){
  return choices.length?'<fieldset class="motion-review"><legend>动作设备事件（模拟）</legend><div class="wrap">'+
    choices.map(([label,event])=>b(label,'motion-sim',{event},'small')).join('')+'</div></fieldset>':'';
 }
-function simulator(){const a=oxygenPage()?null:state.acq,r=state.report;return `<details class="review-panel" open><summary>评审控制区 · 不属于产品界面</summary><p class="compact">这里模拟设备事件和权限，不会操作真实硬件、账号、打印或服务器。数值全为虚构样例。</p>${oxygenPage()&&oxygenHost?oxygenHost.controls(state):''}${bloodPressureReview()}${motionReview()}<div class="wrap">${a&&a.kind!=='group'&&!a.screen&&!a.motion&&!state.stop&&state.route!=='recovery'?b('收到下一设备事件','advance',{},'small primary'):''}${a&&a.kind!=='group'&&!state.stop&&state.route!=='recovery'?b('模拟采集失败','fail',{reason:'未检测到稳定信号，请检查姿势与设备连接。'},'small'):''}${a&&state.stop?.requested?b('收到停止及解除确认','stopped',{released:true},'small primary')+b('模拟停止确认超时','stop-timeout',{},'small'):''}${['history','compare'].includes(state.route)?b('载入两条虚构历史','seed-history',{},'small'):''}${state.route==='report'&&r?.stage==='generating'?b('模拟生成成功','report-generated',{},'small primary'):''}${state.route==='report'&&r?.stage==='generating'?b('模拟生成失败','report-fail',{stage:'generation-failed'},'small'):''}${state.route==='report'&&r?.stage==='generated'?b('收到保存成功确认','report-save',{},'small primary'):''}${state.route==='report'&&r?.stage==='generated'?b('模拟保存失败','report-fail',{stage:'save-failed'},'small'):''}${state.route==='delivery'&&['printing','code-ready'].includes(r?.delivery)?b('模拟收到领取确认','delivered',{},'small primary'):''}${state.route==='delivery'?b('模拟打印失败','delivery-fail',{kind:'print'},'small')+b('模拟领取码过期','delivery-fail',{kind:'qr'},'small'):''}${groupSimulator()}${b(state.admin?'管理权限已模拟':'模拟管理授权','admin',{},'small',state.admin)}${b('模拟无人操作超时','timeout',{},'small')}${b('载入部分完成 Home','seed-scenario',{kind:'partial'},'small')}${b('载入全部有效 Home','seed-scenario',{kind:'complete'},'small')}${b('载入补测接续样例','walk-scenario',{},'small')}${b('必测前置 · 点选末项','mandatory-scenario',{},'small')}${b('末项完成 · 回查未测','wrap-scenario',{},'small')}${b('8项设备 · 体成分后选2项','scope-scenario',{},'small')}${b('组合测量 · 并行模拟','group-scenario',{mode:'parallel'},'small')}${b('组合测量 · 顺序模拟','group-scenario',{mode:'sequential'},'small')}${b('仅选成分与血压 · 范围对照','group-scenario',{mode:'parallel',scope:'pair'},'small')}${b('重置当前演示','reset-demo',{},'small')}</div><details style="margin-top:14px"><summary>最近状态事件 · ${state.events.length} 条</summary><pre class="scroll-pre">${esc(state.events.slice(-10).map(e=>e.at.slice(11,19)+' '+e.event+' '+e.detail).join('\n'))}</pre></details></details>`;}
+function simulator(){
+ const a=oxygenPage()?null:state.acq,r=state.report;
+ const inCapture=a&&a.kind!=='group'&&!state.stop&&state.route!=='recovery';
+ const manual=!automaticDemo||!routeReview;
+ const manualAccessory=inCapture&&manual&&a.accessory?E.accessoryDemoEvent(state):null;
+ const nextDevice=inCapture&&manual&&!a.screen&&!a.motion&&!a.accessory&&!a.ropeStartedAt&&!a.pose?.detecting&&!a.pose?.waiting&&(!a.bp||E.bpDemoEvent(state));
+ const atReport=state.route==='report',atDelivery=state.route==='delivery';
+ const printing=atDelivery&&r?.delivery==='printing',codeReady=atDelivery&&r?.delivery==='code-ready';
+ const scenarios=routeReview?[
+   b('首次测量','home-scenario',{kind:'first'},'small'),
+   b('部分已测与补测','home-scenario',{kind:'mixed'},'small'),
+   b('全部已测与报告','home-scenario',{kind:'complete'},'small'),
+ ].join(''):[
+   b('载入部分完成首页','seed-scenario',{kind:'partial'},'small'),
+   b('载入全部已测首页','seed-scenario',{kind:'complete'},'small'),
+   b('载入补测接续样例','walk-scenario',{},'small'),
+   b('必测前置 · 点选末项','mandatory-scenario',{},'small'),
+   b('末项完成 · 回查未测','wrap-scenario',{},'small'),
+   b('载入三项目计划','scope-scenario',{},'small'),
+   b('组合测量 · 并行模拟','group-scenario',{mode:'parallel'},'small'),
+   b('组合测量 · 顺序模拟','group-scenario',{mode:'sequential'},'small'),
+ ].join('');
+ const pair=b('载入体成分与血压双项样例','group-scenario',{mode:'parallel',scope:'pair'},'small');
+ const group=E.allowed(state,'body')&&E.allowed(state,'bp')&&(!state.acq||state.acq.kind==='group')?
+   (routeReview?`<details class="review-extra" ${state.route.startsWith('group-')?'open':''}><summary>组合测量试验</summary>${groupSimulator()}${!state.acq?pair:''}</details>`:groupSimulator()+pair):'';
+ return `<details id="demo-controls" class="review-panel" lang="zh-CN" open>
+ <summary>演示控制</summary>
+ <p class="compact">用虚构数据检验流程与异常状态。</p>
+ <label class="demo-mode"><input type="checkbox" data-action="auto-demo" ${automaticDemo?'checked':''}>自动模拟设备回执</label>
+ ${oxygenPage()&&oxygenHost?oxygenHost.controls(state):''}${bloodPressureReview()}${motionReview()}
+ <div class="wrap">
+ ${nextDevice?b('发送下一条设备回执','advance',{},'small primary'):''}
+ ${manualAccessory?b(({sample:'发送下一条采样读数',released:'确认采集结束',saved:'确认结果保存'})[manualAccessory.event],
+   'accessory-event',{event:manualAccessory.event,value:manualAccessory.value,acqId:a.id,participantId:state.user.id},'small primary'):''}
+ ${inCapture&&!a.bp?b('模拟采集失败','fail',{reason:'未检测到稳定信号，请检查姿势与设备连接。'},'small'):''}
+ ${a&&state.stop?.requested?b('确认停止与解除','stopped',{released:true},'small primary')+b('模拟停止确认超时','stop-timeout',{},'small'):''}
+ ${['history','compare'].includes(state.route)?b('载入两条虚构历史','seed-history',{},'small'):''}
+ ${atReport&&r?.stage==='generating'?(manual?b('确认报告生成','report-generated',{},'small primary'):'')+b('模拟报告生成失败','report-fail',{stage:'generation-failed'},'small'):''}
+ ${atReport&&r?.stage==='generated'?(manual?b('确认报告保存','report-save',{},'small primary'):'')+b('模拟报告保存失败','report-fail',{stage:'save-failed'},'small'):''}
+ ${printing||codeReady?b('确认报告已领取','delivered',{},'small primary'):''}
+ ${printing?b('模拟打印失败','delivery-fail',{kind:'print'},'small'):''}
+ ${codeReady?b('模拟领取码过期','delivery-fail',{kind:'qr'},'small'):''}
+ ${!state.acq?b(state.admin?'管理权限已模拟':'模拟管理授权','admin',{},'small',state.admin):''}
+ ${!state.acq&&!state.privacyLocked&&state.route!=='standby'?b('模拟无人操作超时','timeout',{},'small'):''}
+ </div>
+ <div class="wrap">${scenarios}${b('重置当前演示','reset-demo',{},'small')}</div>
+ ${group}
+ <details class="review-extra"><summary>最近状态事件 · ${state.events.length} 条</summary>
+ <pre class="scroll-pre">${esc(state.events.slice(-10).map(e=>e.at.slice(11,19)+' '+e.event+' '+e.detail).join('\n'))}</pre></details>
+ </details>`;
+}
 function sidebar(){return `<nav class="sidebar" aria-label="页面结构">${P.groups.map(([g,label])=>`<details ${['entry','session','read'].includes(g)?'open':''}><summary>${label}</summary>${P.pages.filter(p=>p.group===g&&!p.id.includes('/')&&!p.reviewOnly).map(p=>b(p.name,'inspect',{id:p.id},'nav-item '+(inspect===p.id?'active':''))).join('')}${g==='test'?C.visibleTests.map(t=>b(t.name,'inspect',{id:'prepare/'+t.id},'nav-item')).join(''):''}</details>`).join('')}<p class="muted compact" style="font-size:11px">侧栏查看页面说明，不改变当前测量。</p></nav>`;}
 function shell(){return `<header class="topbar"><div><div class="wordmark">ANOVATOR <small>G01 / v06</small></div><small class="brand-sub">全局功能与流程 · 可评审原型</small></div><div class="top-controls"><label>设备条件<select id="profile-select">${C.profiles.map(p=>`<option value="${p.id}" ${p.id===state.profileId?'selected':''}>${esc(p.name)}</option>`).join('')}</select></label><label>本次评审视角<select id="role-select">${C.roles.map(p=>`<option value="${p.id}" ${p.id===state.role?'selected':''}>${p.name}</option>`).join('')}</select></label></div></header><nav class="tabs" aria-label="原型查看方式">${[['experience','体验原型'],['map','全局地图'],['spec','页面说明'],['coverage','功能去向'],['issues','待核与评审']].map(([id,label])=>b(label,'tab',{id},tab===id?'active':'')).join('')}</nav><div class="context-strip"><span class="profile-note">${esc(profile().note)}</span><span>${C.visibleTests.length} 类任务 · ${P.pages.length} 个页面定义 · 真实设备验证待做</span></div>`;}
 function renderDevice(){
@@ -1065,9 +1115,9 @@ function renderExperience(){
  inspect=state.route;
  const versions=reviewVersionControl();
  return `<div class="workspace">${sidebar()}<main>${reviewNotice()}
- <div class="scenario-launcher"><p>流程体验 · 载入虚构样例</p><div class="wrap">${b('首页 · 首次','home-scenario',{kind:'first'})}${b('首页 · 部分已测','home-scenario',{kind:'mixed'})}${b('血压 · 光膜 v1','bp-scenario')}${b('血氧与脉率 · E02','oxygen-scenario')}${b('普通停止','stop-scenario',{kind:'ordinary'})}${b('设备收尾','stop-scenario',{kind:'wind-down'})}${b('多次测量','stop-scenario',{kind:'repeated'})}</div><label class="demo-mode"><input type="checkbox" data-action="auto-demo" ${automaticDemo?'checked':''}>自动模拟测量与停止响应</label>${screenTestReview()}</div>
+ <div class="scenario-launcher"><p>流程体验 · 载入虚构样例</p><div class="wrap">${b('首页 · 首次','home-scenario',{kind:'first'})}${b('首页 · 部分已测','home-scenario',{kind:'mixed'})}${b('血压 · 光膜 v1','bp-scenario')}${b('血氧与脉率 · E02','oxygen-scenario')}${b('普通停止','stop-scenario',{kind:'ordinary'})}${b('设备收尾','stop-scenario',{kind:'wind-down'})}${b('多次测量','stop-scenario',{kind:'repeated'})}</div>${screenTestReview()}</div>
  <div class="screen-caption"><span>9:16 · 27寸以上触控大屏</span><div class="screen-caption-actions">${versions}<a href="${typeof location!=='undefined'&&location.protocol==='file:'?'../global-experience-v04/index.html':'/baseline/'}" target="_blank" rel="noopener" id="baseline-link">v04.11 对照 ↗</a><button type="button" data-screen-action="enter">全屏体验</button></div></div>
- <div class="fullscreen-tools" aria-label="触控体验工具"><span id="screen-mode-label">触控体验</span>${versions}<button type="button" data-screen-action="controls" aria-expanded="false">评审控制</button><button type="button" data-screen-action="exit">退出全屏</button></div>
+ <div class="fullscreen-tools" aria-label="触控体验工具"><span id="screen-mode-label">触控体验</span>${versions}<button type="button" data-screen-action="controls" lang="zh-CN" aria-controls="demo-controls" aria-expanded="false">演示控制</button><button type="button" data-screen-action="exit">退出全屏</button></div>
  <div class="device-stage"><div class="device-viewport">${renderDevice()}</div></div>
  <p class="screen-note">模拟测量与停止响应，不连接真实设备。数值为样例；资料已预填，自动测高与称重随体成分完成。</p>${simulator()}</main><aside class="aside">${inspector(inspect)}</aside></div>`;
 }
@@ -1342,7 +1392,8 @@ function mountProjectDirectory(){
  const list=$('.directory-viewport'),filter=directory.filter;
  list.scrollTop=directory.scroll[filter];
  list.addEventListener('scroll',()=>{directory.scroll[filter]=list.scrollTop;});
- $('.directory-scroll-hint').hidden=list.scrollHeight<=list.clientHeight;
+ const hint=$('.directory-scroll-hint');
+ if(hint)hint.hidden=list.scrollHeight<=list.clientHeight;
  homeCameraView?.cover(true);
 }
 function unmountProjectDirectory(){
@@ -1445,7 +1496,11 @@ function act(action,payload={},source){
  if(action==='cancel-review'){reviewConfirm=null;render();return;}
  if(action==='confirm-review'){const next=reviewConfirm;reviewConfirm=null;if(next)act(next.action,{...next.payload,confirmed:true});return;}
  if(replaces.includes(action)&&!payload.confirmed&&(state.user||state.acq||valid())){reviewConfirm={action,payload};tab='experience';render();window.scrollTo(0,0);return;}
- if(action==='auto-demo'){automaticDemo=!automaticDemo;render();return;}
+ if(action==='auto-demo'){
+   automaticDemo=!automaticDemo;render();
+   $('#demo-controls [data-action="auto-demo"]')?.focus({preventScroll:true});
+   return;
+ }
  if(action==='body-get-ready'){
     if(showsBodyIntroduction()){
       (state.localTasks??={}).bodyIntroReady=true;
@@ -1465,7 +1520,10 @@ function act(action,payload={},source){
  if(action==='tab')tab=payload.id;
  else if(action==='inspect'){inspect=payload.id;tab='spec';}
  else if(action==='preview-page'){loadPreview(payload.id);}
- else if(action==='home-scenario'){loadHomeScenario(payload.kind);}
+ else if(action==='home-scenario'){
+   loadHomeScenario(payload.kind);
+   if(directNavigation)run('open-direct-project',{id:'body'});
+ }
  else if(action==='screen-preview'){loadScreenShowcase(payload.id);}
  else if(action==='bp-scenario'){loadBloodPressureScenario();}
  else if(action==='oxygen-scenario'){loadOxygenScenario();}

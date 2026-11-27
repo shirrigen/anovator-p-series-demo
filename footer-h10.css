@@ -41,12 +41,6 @@
   border-color: var(--ink);
   border-radius: 16px;
 }
-.footer-h10 .project-directory:not(.results-directory) .directory-scroll-hint {
-  grid-column: 3;
-  justify-self: end;
-  margin-top: 11px;
-}
-
 .footer-h10 .h10-result-index {
   position: relative;
   height: 55.5px;

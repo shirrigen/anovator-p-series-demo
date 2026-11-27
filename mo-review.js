@@ -378,7 +378,7 @@
   entryFilm.addEventListener('playing', () => entryFilm.classList.add('is-playing'));
   entryFilm.addEventListener('error', () => entryFilm.classList.remove('is-playing'));
   let previousPage = null;
-  let controlsOpen = false;
+  let controlsOpen = true;
 
   function stageFilm(panel) {
     if (!panel || reduction.matches) {
@@ -797,13 +797,15 @@
     }
     const caption = root.ANOVATOR_PAGES_RELEASE ? null : at('.screen-caption > span', app);
     if (caption) caption.textContent = 'ANOVATOR measurement preview';
-    for (const surface of app.querySelectorAll('.screen-caption, .fullscreen-tools, .review-panel, .review-confirm, .entry-options')) {
+    for (const surface of app.querySelectorAll('.screen-caption, .fullscreen-tools, .entry-options')) {
       root.ANOVATOR_REVIEW_EN?.surface(surface);
     }
-    const reviewPanel = at('.review-panel', app);
+    const reviewPanel = at('#demo-controls', app);
     if (reviewPanel && !document.body.classList.contains('screen-fullscreen')) {
       reviewPanel.open = controlsOpen;
-      reviewPanel.addEventListener('toggle', () => { controlsOpen = reviewPanel.open; });
+      reviewPanel.addEventListener('toggle', () => {
+        if(reviewPanel.isConnected&&!document.body.classList.contains('screen-fullscreen'))controlsOpen=reviewPanel.open;
+      });
     }
     previousPage = route;
   }

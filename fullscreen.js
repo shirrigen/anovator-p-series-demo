@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 // Presentation only: measurement state and device events stay in app/engine.
-let active=false,controlsOpen=false,nativeSeen=false,requestId=0,restoreScroll=0;
+let active=false,controlsOpen=false,nativeSeen=false,panelWasOpen=false,requestId=0,restoreScroll=0;
 const q=s=>document.querySelector(s);
 const display=text=>window.ANOVATOR_REVIEW_EN?.text(text)||text;
 const fullscreenElement=()=>document.fullscreenElement||document.webkitFullscreenElement;
@@ -16,7 +16,7 @@ function sync(){
     viewport.style.width=(540*scale)+'px';
     viewport.style.height=(960*scale)+'px';
     device.style.transform='scale('+scale+')';
-    const panel=q('.review-panel');
+    const panel=q('#demo-controls');
     if(panel)panel.open=controlsOpen;
   }else{
     viewport.style.removeProperty('width');
@@ -24,14 +24,14 @@ function sync(){
     device.style.transform='scale('+(viewport.getBoundingClientRect().width/540)+')';
   }
   const controls=q('[data-screen-action="controls"]');
-  if(controls){controls.textContent=display(controlsOpen?'收起评审控制':'评审控制');controls.setAttribute('aria-expanded',String(controlsOpen));}
+  if(controls){controls.textContent=controlsOpen?'收起演示控制':'演示控制';controls.setAttribute('aria-expanded',String(controlsOpen));}
   const label=q('#screen-mode-label');
   if(label)label.textContent=display(nativeSeen?'全屏触控体验':'窗口触控体验');
 }
 function leavePresentation(){
   active=false;controlsOpen=false;nativeSeen=false;requestId++;
   sync();
-  const panel=q('.review-panel');if(panel)panel.open=true;
+  const panel=q('#demo-controls');if(panel)panel.open=panelWasOpen;
   window.scrollTo(0,restoreScroll);
   q('[data-screen-action="enter"]')?.focus({preventScroll:true});
 }
@@ -47,6 +47,7 @@ async function exit(){
 async function enter(){
   if(active)return;
   restoreScroll=window.scrollY;
+  panelWasOpen=!!q('#demo-controls')?.open;
   active=true;controlsOpen=false;nativeSeen=false;
   const attempt=++requestId;
   sync();
@@ -78,6 +79,12 @@ document.addEventListener('click',event=>{
   else if(button.dataset.screenAction==='exit')void exit();
   else if(button.dataset.screenAction==='controls'){controlsOpen=!controlsOpen;sync();}
 });
+document.addEventListener('toggle',event=>{
+  if(active&&event.target.id==='demo-controls'&&event.target.isConnected&&controlsOpen!==event.target.open){
+    controlsOpen=event.target.open;
+    sync();
+  }
+},true);
 function nativeChanged(){
   if(!active)return;
   if(fullscreenElement()){nativeSeen=true;sync();}

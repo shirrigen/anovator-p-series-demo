@@ -9,6 +9,12 @@ window.ANOVATOR_OXYGEN_HOST = function createOxygenHost({
   const key=s=>[s.user?.id,s.route,s.acq?.id,s.results.oxygen?.revision,s.mode,s.lastStop?.acqId].join('|');
   const english={body:'Body composition',bp:'Blood pressure',oxygen:'Oxygen & pulse',posture:'Posture',shoulder:'Shoulder mobility',lung:'Vital capacity',balance:'Balance',agility:'Reaction time',grip:'Grip strength',jump:'Vertical jump',pushups:'Push-ups',rope:'Jump rope',vision:'Visual acuity',color:'Colour vision',astigmatism:'Astigmatism',scan360:'Body scan'};
   const faults={normal:'正常采集',connect:'无法连接指夹',start:'指夹启动未响应',silent:'没有有效信号',pulse:'只有血氧',oxygen:'只有脉率',hold:'延迟解除回执',save:'保存失败一次',unknown:'保存回执丢失一次'};
+  const stageLabel=stage=>({
+    ready:'待准备',starting:'正在启动',acquiring:'等待有效信号',measuring:'测量中',
+    interrupted:'信号中断',releasing:'等待解除确认',recording:'保存读数中',result:'已取得结果',
+    stopping:'等待停止确认',stopped:'已停止',failed:'采集失败',returning:'返回准备',
+    saveFailed:'保存失败',saveUnknown:'等待保存确认',
+  })[stage]||'待准备';
   function load(){
     if(!loading)loading=Promise.all(['template','artwork','three','material','device'].map(name=>new Promise((resolve,reject)=>{
       const script=document.createElement('script');script.src='oxygen/'+name+'.js';
@@ -97,7 +103,7 @@ window.ANOVATOR_OXYGEN_HOST = function createOxygenHost({
         if(!valid())return;
         s.oxygenFlow={...data,participantId:owner};persist();chrome(view);
         const panel=document.querySelector('[data-oxygen-review]');
-        if(panel){const notice=panel.querySelector('output');if(notice)notice.value=data.stage;}
+        if(panel){const notice=panel.querySelector('output');if(notice)notice.value=stageLabel(data.stage);}
       }
     };
   }
@@ -140,7 +146,7 @@ window.ANOVATOR_OXYGEN_HOST = function createOxygenHost({
       '<label>外设事件<select data-oxygen-control="fault">'+Object.entries(faults).map(([id,text])=>'<option value="'+id+'" '+(id===(c.fault||'normal')?'selected':'')+'>'+text+'</option>').join('')+'</select></label>'+
       [['oxygen','血氧 %',90,100,98],['pulse','脉率 bpm',54,108,72]].map(([id,label,min,max,initial])=>'<label>'+label+'<input type="number" data-oxygen-control="'+id+'" min="'+min+'" max="'+max+'" value="'+(c.settings?.[id]??initial)+'"></label>').join('')+
       [['connected','指夹已连接',s.settings.peripherals.oximeter],['contact','手指接触有效',c.contact!==false],['reduced','减少动效',(directEnd&&systemReduce)||(c.reduced??systemReduce)],['slow','半速回看',c.slow]].map(([id,label,checked])=>'<label><input type="checkbox" data-oxygen-control="'+id+'" '+(checked?'checked':'')+'>'+label+'</label>').join('')+
-      (automatic()?'':'<button type="button" data-oxygen-step>前进 0.5 秒</button>')+'<output aria-label="血氧流程状态">'+(c.stage||'ready')+'</output></fieldset>';
+      (automatic()?'':'<button type="button" data-oxygen-step>前进 0.5 秒</button>')+'<output aria-label="血氧流程状态">'+stageLabel(c.stage)+'</output></fieldset>';
   }
   return {isPage:oxygenPage,sync,controls,
     canRetain(slot){
