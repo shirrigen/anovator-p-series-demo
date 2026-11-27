@@ -8,6 +8,7 @@
  const footer=content=>'<div class="wrap task-actions">'+content+'</div>';
  const status=text=>'<p class="motion-status" role="status">'+text+'</p>';
  const make=s=>'<strong>'+s+'</strong>';
+ const motorIcon='<span class="motor-placeholder-icon" aria-hidden="true"></span>';
 
  function frame(id,phase,inner,actions){
    const title=id==='balance'?'<strong>Balance</strong> assessment':'<strong>'+names[id]+'</strong>';
@@ -123,26 +124,6 @@
    return frame('shoulder',phase,detail,actions);
  }
 
- function pushGraphic(){
-   return '<svg class="push-motion-graphic" viewBox="0 0 330 220" aria-hidden="true"><defs>'+
-     '<linearGradient id="push-ground"><stop stop-color="#8793a2" stop-opacity="0"/><stop offset=".6" stop-color="#b6c1cc"/><stop offset="1" stop-color="#8793a2" stop-opacity="0"/></linearGradient>'+
-     '<linearGradient id="push-sheen" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c2ccda" stop-opacity=".44"/><stop offset="1" stop-color="#465362" stop-opacity=".03"/></linearGradient></defs>'+
-     '<path d="M10 191H320" stroke="url(#push-ground)" stroke-width="1.5"/>'+
-     '<path d="M95 49 Q190 63 225 191 Q167 142 96 116Z" fill="url(#push-sheen)"/>'+
-     '<path d="M95 49V116L155 133L225 191" fill="none" stroke="#758191" stroke-width="1.4"/>'+
-     '<path class="push-motion-path" d="M95 49L164 106L225 191" fill="none" stroke="#eef5f8" stroke-width="2"/>'+
-     '<g class="push-motion-points" fill="#f3f5f8"><circle cx="95" cy="49" r="4"/><circle cx="164" cy="106" r="4"/><circle cx="225" cy="191" r="4"/></g></svg>';
- }
-
- function jumpGraphic(){
-   return '<svg class="jump-motion-graphic" viewBox="0 0 330 220" aria-hidden="true"><defs>'+
-     '<linearGradient id="jump-ground"><stop stop-color="#8793a2" stop-opacity="0"/><stop offset=".5" stop-color="#e0e7eb"/><stop offset="1" stop-color="#8793a2" stop-opacity="0"/></linearGradient>'+
-     '<linearGradient id="jump-sheen" x1="0" y1="0" x2=".5" y2="1"><stop stop-color="#b5c2d2" stop-opacity=".60"/><stop offset=".76" stop-color="#43556d" stop-opacity=".05"/></linearGradient></defs>'+
-     '<path d="M10 191H320" stroke="url(#jump-ground)" stroke-width="1.5"/>'+
-     '<path class="jump-lift" d="M45 177Q111 141 121 57Q148 9 165 13Q182 9 209 57Q219 141 285 177Q170 143 45 177Z" fill="url(#jump-sheen)"/>'+
-     '<path d="M46 177Q120 153 165 153Q212 153 285 177" fill="none" stroke="#92a2b7" stroke-width="1"/></svg>';
- }
-
  function motorDuring(s,c,q){
    const p=q.phase,push=q.id==='pushups';
    const copy=push?{position:'Get into the start position.',repeating:'Keep your form.',lost:'Tracking paused.',release:'You can stop now.'}:
@@ -151,11 +132,10 @@
      q.note==='rejected'?'Last rep did not count':q.note==='counted'?'✓ Last rep counted':'Waiting for the first valid rep'):
      p==='invalid'?'Stand steady, then try again.':p==='landing'?'Checking the landing':p==='release'?'Saving the captured attempt…':
      p==='go'?'Jump on cue':p==='airborne'?'Waiting for the landing':'Waiting for a stable standing position';
-   const art='<span class="motor-placeholder-icon" aria-hidden="true"></span>';
    const heading=p==='go'?'<p class="jump-go">Go</p>':'<p class="motion-intro">'+copy[p]+'</p>';
    const data=push?'<div class="motor-live">'+readout('Valid reps',q.count,'')+'</div>':'';
    const controls=['lost','invalid'].includes(p)?retryControls(s,c):p==='release'?'':stop(s,c);
-   return frame(q.id,p,heading+art+data+status(hint),controls);
+   return frame(q.id,p,heading+motorIcon+data+status(hint),controls);
  }
 
  function scanGraphic(angle){
@@ -231,10 +211,10 @@
        '<div class="balance-readings">'+readout('Balance score',value('balance'),'%')+
        readout('Valid hold',value('holdDuration'),'s')+'</div>'+status('Reading recorded');
    }else if(id==='jump'){
-     detail='<p class="motion-intro">Your jump is recorded.</p>'+jumpGraphic()+'<div class="motor-live">'+
+     detail='<p class="motion-intro">Your jump is recorded.</p>'+motorIcon+'<div class="motor-live">'+
        readout('Jump height',value('jumpHeight'),'cm')+'</div>'+status(Number.isFinite(value('jumpHeight'))?'Recorded · Demo result':'Height unavailable');
    }else if(id==='pushups'){
-     detail='<p class="motion-intro">Valid reps recorded.</p>'+pushGraphic()+'<div class="motor-live">'+
+     detail='<p class="motion-intro">Valid reps recorded.</p>'+motorIcon+'<div class="motor-live">'+
        readout('Valid reps',value('reps'),'')+'</div>'+status(record.sample?'Recorded · Demo result':'Recorded');
    }else{
      detail='<div class="motion-prep-copy"><h2>Capture recorded.</h2><p>The capture status is saved to this session.</p></div>'+

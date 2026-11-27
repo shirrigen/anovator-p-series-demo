@@ -224,14 +224,6 @@
   font-size: 11px;
 }
 
-.push-motion-graphic, .jump-motion-graphic {
-  position: absolute;
-  top: 108px;
-  left: 15px;
-  width: 330px;
-  height: 220px;
-}
-.push-motion-graphic { top: 100px; }
 .motion-stage[data-motion-phase="repeating"] .motor-placeholder-icon { opacity: .74; }
 .motion-stage[data-rep-outcome="counted"] .motor-placeholder-icon {
   animation: push-accept .7s ease both;
