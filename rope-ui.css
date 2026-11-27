@@ -1,14 +1,17 @@
 /* S04 v04, with the count and clock fixed inside the front rope arc. */
 .rope-canvas-slot { position: absolute; left: 0; top: -48px; width: 360px; height: 640px; z-index: -1; }
 .rope-canvas-slot canvas { display: block; width: 100%; height: 100%; }
+.device-main .rope-screen > .body-title { font-weight: 700; }
 .rope-instruction { position: relative; margin: 13px 24px 0; color: #c6c6cc; font-size: 15px; line-height: 20px; }
 .rope-ready-art {
   position: absolute;
-  top: 65px;
+  top: 87px;
   left: 0;
   width: 360px;
   height: 340px;
   object-fit: contain;
+  /* The source has a cropped caption above the left of the mannequin. */
+  clip-path: polygon(0 6px, 46% 6px, 46% 0, 100% 0, 100% 100%, 0 100%);
   z-index: -1;
 }
 .rope-note { position: absolute; bottom: 20px; left: 24px; right: 24px; margin: 0; color: #c6c6cc; font-size: 13px; }

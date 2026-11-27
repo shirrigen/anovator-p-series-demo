@@ -31,7 +31,7 @@
    const buttons=ready?actions(skip+b(kindText,'start-measure',{id:'rope'},'primary')):
      result?resultActions('rope'):actions(stop?.status==='unconfirmed'?b('Retry stop','retry-stop',{},'primary'):b(stop?'Stopping':'Stop','stop',{},'stop-action',!!stop));
    return '<div class="body-wrap"><section class="body-screen rope-screen" lang="en" data-rope-stage="'+
-     (result?'result':ready?'ready':'measuring')+'" data-attempt="'+(a?.id||record?.acqId||'')+'"><h1 class="body-title"><strong>Jump</strong> rope</h1>'+
+     (result?'result':ready?'ready':'measuring')+'" data-attempt="'+(a?.id||record?.acqId||'')+'"><h1 class="body-title">Jump rope</h1>'+
      heading+content+'</section></div>'+buttons;
  }
 
