@@ -39,7 +39,10 @@
   margin-bottom: 8px;
 }
 .mo-flow-review body:not(.screen-fullscreen) .workspace > main > :is(.review-panel, .entry-options) { position: static; }
-.mo-flow-review .screen-fullscreen .workspace > main > .review-panel { max-width: none; }
+.mo-flow-review .screen-fullscreen .workspace > main > .review-panel {
+  width: min(440px, calc(100vw - 20px));
+  max-width: none;
+}
 .mo-flow-review .workspace > main > .review-confirm { color: #18191b; }
 .mo-flow-review .review-panel :is(p, label, legend, pre) { color: var(--review-dim); }
 .mo-flow-review .review-panel button, .mo-flow-review .entry-options button { color: #18191b; }
