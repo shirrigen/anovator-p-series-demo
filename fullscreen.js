@@ -16,7 +16,7 @@ function sync(){
     viewport.style.width=(540*scale)+'px';
     viewport.style.height=(960*scale)+'px';
     device.style.transform='scale('+scale+')';
-    const panel=q('#demo-controls');
+    const panel=q('details#demo-controls');
     if(panel)panel.open=controlsOpen;
   }else{
     viewport.style.removeProperty('width');
@@ -31,7 +31,7 @@ function sync(){
 function leavePresentation(){
   active=false;controlsOpen=false;nativeSeen=false;requestId++;
   sync();
-  const panel=q('#demo-controls');if(panel)panel.open=panelWasOpen;
+  const panel=q('details#demo-controls');if(panel)panel.open=panelWasOpen;
   window.scrollTo(0,restoreScroll);
   q('[data-screen-action="enter"]')?.focus({preventScroll:true});
 }
@@ -47,7 +47,7 @@ async function exit(){
 async function enter(){
   if(active)return;
   restoreScroll=window.scrollY;
-  panelWasOpen=!!q('#demo-controls')?.open;
+  panelWasOpen=!!q('details#demo-controls')?.open;
   active=true;controlsOpen=false;nativeSeen=false;
   const attempt=++requestId;
   sync();

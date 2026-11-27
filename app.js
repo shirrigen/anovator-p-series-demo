@@ -1131,18 +1131,19 @@ function renderExperience(){
 }
 function renderPagesDemo(){
  const fast=state.settings.demoBodySpeed===4;
- return `<div class="workspace"><main>
- <div class="screen-caption"><span>ANOVATOR P Series · Interactive demo</span><button type="button" data-screen-action="enter">Full screen</button></div>
+ return `<div class="workspace"><main class="pages-layout">
+ <div class="screen-caption"><span>ANOVATOR P Series · Interactive demo</span></div>
+ <button type="button" class="pages-fullscreen-button" data-screen-action="enter">Full screen</button>
  <div class="fullscreen-tools" aria-label="Display controls"><button type="button" data-screen-action="controls" lang="zh-CN" aria-controls="demo-controls" aria-expanded="false">演示控制</button><button type="button" data-screen-action="exit">Exit full screen</button></div>
- <details id="demo-controls" class="review-panel pages-demo-controls" lang="zh-CN">
- <summary>演示控制</summary>
+ <div class="device-stage"><div class="device-viewport">${renderDevice()}</div></div>
+ <p class="screen-note">${['standby','identity'].includes(state.route)?'Enter any number to try the demo. ':''}Simulated measurements only.</p>
+ <section id="demo-controls" class="review-panel pages-demo-controls" lang="zh-CN" aria-labelledby="pages-demo-heading">
+ <h2 id="pages-demo-heading">演示控制</h2>
  <div class="pages-demo-options">
  <label><input type="checkbox" data-action="demo-body-required" ${E.bodyRequired(state)?'checked':''} ${demoRequirementLocked()?'disabled':''}>体成分必测</label>
  <label>体成分进度 <select data-demo-body-speed><option value="1">原速</option><option value="4" ${fast?'selected':''}>4× 加速</option></select></label>
  ${canFinishDemoCapture()?b('跳过等待，查看结果','demo-finish-body',{},'small'):''}
- </div></details>
- <div class="device-stage"><div class="device-viewport">${renderDevice()}</div></div>
- <p class="screen-note">${['standby','identity'].includes(state.route)?'Enter any number to try the demo. ':''}Simulated measurements only.</p>
+ </div></section>
  </main></div>`;
 }
 function scaleDevice(){const viewport=$('.device-viewport'),device=$('.device');if(!viewport||!device)return;device.style.transform='scale('+(viewport.getBoundingClientRect().width/540)+')';const link=$('#baseline-link');if(link&&typeof location!=='undefined')link.href=location.protocol==='file:'?'../global-experience-v04/index.html':location.protocol+'//'+location.host+'/baseline/';}

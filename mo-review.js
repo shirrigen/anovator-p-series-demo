@@ -408,7 +408,7 @@
   entryFilm.addEventListener('playing', () => entryFilm.classList.add('is-playing'));
   entryFilm.addEventListener('error', () => entryFilm.classList.remove('is-playing'));
   let previousPage = null;
-  let controlsOpen = !root.ANOVATOR_PAGES_RELEASE;
+  let controlsOpen = true;
 
   function stageFilm(panel) {
     if (!panel || reduction.matches) {
@@ -830,7 +830,7 @@
     for (const surface of app.querySelectorAll('.screen-caption, .fullscreen-tools, .entry-options')) {
       root.ANOVATOR_REVIEW_EN?.surface(surface);
     }
-    const reviewPanel = at('#demo-controls', app);
+    const reviewPanel = at('details#demo-controls', app);
     if (reviewPanel && !document.body.classList.contains('screen-fullscreen')) {
       reviewPanel.open = controlsOpen;
       reviewPanel.addEventListener('toggle', () => {
