@@ -71,7 +71,7 @@
  }
 
  function frame(kind,view,s,ctx,content,actions){
-   const showPrivacy=!ctx.pagesRelease&&['result','detail'].includes(kind)&&captured(s,view,ctx);
+   const showPrivacy=['result','detail'].includes(kind)&&captured(s,view,ctx);
    const privacy=showPrivacy?'<button type="button" class="pose-privacy" data-action="privacy" data-face-hidden="'+s.faceHidden+
      '" aria-label="'+(s.faceHidden?'Show face':'Hide face')+'"><img src="'+artwork+'face-'+(s.faceHidden?'hidden':'visible')+
      '-24.svg" width="24" height="24" alt=""></button>':'';

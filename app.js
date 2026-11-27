@@ -1587,6 +1587,7 @@ function act(action,payload={},source){
  if(directNavigation&&action==='open-direct-project')$('.receipt-item[aria-current="page"]')?.focus({preventScroll:true});
  if(returnToTitle&&onHome())$('.hub-callout-'+returnToTitle+' .hub-prepare-title')?.focus({preventScroll:true});
  if(action==='grip-result-side')$('.grip-result-options [aria-pressed="true"]')?.focus({preventScroll:true});
+ if(action==='privacy')$('.pose-privacy')?.focus({preventScroll:true});
  if(oldRoute!==state.route||['tab','inspect','preview-page'].includes(action))window.scrollTo(0,0);
 }
 document.addEventListener('click',event=>{
