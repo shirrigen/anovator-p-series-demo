@@ -151,7 +151,7 @@
      q.note==='rejected'?'Last rep did not count':q.note==='counted'?'✓ Last rep counted':'Waiting for the first valid rep'):
      p==='invalid'?'Stand steady, then try again.':p==='landing'?'Checking the landing':p==='release'?'Saving the captured attempt…':
      p==='go'?'Jump on cue':p==='airborne'?'Waiting for the landing':'Waiting for a stable standing position';
-   const art=push?pushGraphic():jumpGraphic();
+   const art='<span class="motor-placeholder-icon" aria-hidden="true"></span>';
    const heading=p==='go'?'<p class="jump-go">Go</p>':'<p class="motion-intro">'+copy[p]+'</p>';
    const data=push?'<div class="motor-live">'+readout('Valid reps',q.count,'')+'</div>':'';
    const controls=['lost','invalid'].includes(p)?retryControls(s,c):p==='release'?'':stop(s,c);

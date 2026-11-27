@@ -182,17 +182,10 @@
    }
    const previousCount=last?.attempt===next.attempt?last?.count:0;
    if(id==='pushups'&&phase==='repeating'&&next.note==='counted'&&next.count>(previousCount??0)){
-     animate(screen.querySelector('.push-motion-points'),'rep-accepted',[
+     animate(screen.querySelector('.motor-placeholder-icon'),'rep-accepted',[
        {opacity:1,filter:'drop-shadow(0 0 5px #ecf5ff)'},
        {opacity:.74,filter:'none'}
      ],{duration:timing.read,easing:timing.easeRead});
-   }
-   if(id==='jump'&&changed&&['airborne','landing'].includes(phase)){
-     const rising=phase==='airborne';
-     animate(screen.querySelector('.jump-lift'),'jump-trajectory',[
-       {transform:rising?'translateY(0)':'translateY(-18px)',opacity:rising?.64:1},
-       {transform:rising?'translateY(-18px)':'translateY(0)',opacity:rising?1:.55}
-     ],{duration:timing.enter,easing:timing.easeEnter});
    }
    if(id==='balance'&&phase==='result'&&last?.phase==='release'&&last.attempt===next.attempt){
      const vessel=screen.querySelector('.balance-vessel');

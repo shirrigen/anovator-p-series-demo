@@ -139,15 +139,20 @@
   .direct-navigation .balance-readings .balance-time-track::after { display: none; }
 }
 
-.shoulder-placeholder-icon {
+.shoulder-placeholder-icon, .motor-placeholder-icon {
   position: absolute;
   top: 163px;
   left: 128px;
   width: 104px;
   height: 104px;
   background: #c6c9d3;
-  mask: url("assets/measurement-home/MP08-shoulder-mobility.svg") center / contain no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
 }
+.shoulder-placeholder-icon { mask-image: url("assets/measurement-home/MP08-shoulder-mobility.svg"); }
+[data-motion-test="pushups"] .motor-placeholder-icon { mask-image: url("assets/measurement-home/MP12-push-up.svg"); }
+[data-motion-test="jump"] .motor-placeholder-icon { mask-image: url("assets/measurement-home/MP13-leg-power.svg"); }
 .motion-stage[data-motion-test="shoulder"][data-motion-phase="ready"] .shoulder-placeholder-icon { top: 210px; }
 .motion-stage[data-motion-test="shoulder"][data-motion-phase="result"] .shoulder-placeholder-icon {
   top: 47px;
@@ -227,13 +232,13 @@
   height: 220px;
 }
 .push-motion-graphic { top: 100px; }
-.motion-stage[data-motion-phase="repeating"] .push-motion-points { opacity: .74; }
-.motion-stage[data-rep-outcome="counted"] .push-motion-points {
+.motion-stage[data-motion-phase="repeating"] .motor-placeholder-icon { opacity: .74; }
+.motion-stage[data-rep-outcome="counted"] .motor-placeholder-icon {
   animation: push-accept .7s ease both;
 }
-.direct-navigation .motion-stage[data-rep-outcome="counted"] .push-motion-points { animation: none; }
+.direct-navigation .motion-stage[data-rep-outcome="counted"] .motor-placeholder-icon { animation: none; }
 @keyframes push-accept { 0% { filter: drop-shadow(0 0 8px #f8fbff); opacity: 1; } 100% { filter: none; opacity: .74; } }
-.motion-stage[data-motion-phase="lost"] .push-motion-graphic { opacity: .34; }
+.motion-stage:is([data-motion-phase="lost"], [data-motion-phase="invalid"]) .motor-placeholder-icon { opacity: .4; }
 .motor-live { position: absolute; top: 329px; left: 44px; }
 .jump-go {
   position: absolute;
@@ -246,17 +251,6 @@
   line-height: 60px;
   font-weight: 700;
 }
-.motion-stage[data-motion-phase="airborne"] .jump-lift {
-  transform: translateY(-24px);
-  animation: jump-raise .62s cubic-bezier(.18,.62,.26,1) both;
-}
-.direct-navigation .motion-stage[data-motion-phase="airborne"] .jump-lift {
-  animation: none;
-  transform: translateY(-18px);
-}
-@keyframes jump-raise { from { transform: translateY(12px); opacity: .38; } to { transform: translateY(-24px); opacity: 1; } }
-.motion-stage[data-motion-phase="landing"] .jump-lift { opacity: .55; }
-.motion-stage[data-motion-phase="invalid"] .jump-motion-graphic { opacity: .37; }
 
 .scan-field {
   position: absolute;
@@ -269,7 +263,5 @@
 .scan-field svg { position: absolute; top: 53px; left: 0; width: 232px; }
 .motion-stage[data-motion-phase="platform-stopping"] .scan-field svg { opacity: .56; }
 @media (prefers-reduced-motion: reduce) {
-  .motion-stage[data-rep-outcome="counted"] .push-motion-points,
-  .motion-stage[data-motion-phase="airborne"] .jump-lift { animation: none; }
-  .direct-navigation .motion-stage[data-motion-phase="airborne"] .jump-lift { transform: none; }
+  .motion-stage[data-rep-outcome="counted"] .motor-placeholder-icon { animation: none; }
 }
