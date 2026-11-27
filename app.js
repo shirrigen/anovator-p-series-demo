@@ -3,14 +3,17 @@
 const C=ANOVATOR_CATALOG,P=ANOVATOR_PAGES,E=ANOVATOR_ENGINE,H=ANOVATOR_HEIGHT,W=ANOVATOR_WEIGHT,ACCOUNT_K='anovator-g01-v04-accounts',FEEDBACK_K='anovator-g01-v04-feedback';
 const params=typeof location==='undefined'?null:new URLSearchParams(location.search);
 const pagesRelease=window.ANOVATOR_PAGES_RELEASE===true;
+const pagesModesKey='anovator-pages-demo-options-v01';
 const scenario=pagesRelease?null:params?.get('scenario');
 const routeReview=window.ANOVATOR_ROUTE_REVIEW===true,h10Footer=!!window.ANOVATOR_FOOTER_H10;
-const directNavigation=routeReview&&h10Footer&&(pagesRelease||params?.get('navigation')==='direct');
+const navigation=params?.get('navigation');
+const directNavigation=routeReview&&h10Footer&&(pagesRelease?navigation!=='mo':navigation==='direct');
 if(directNavigation)document.documentElement?.classList.add('direct-navigation');
 const directMotion=directNavigation?window.ANOVATOR_DIRECT_MOTION:null;
 const scenarioSession=['route-review','bp-review','session-progress','layers-review','title-review','recorded-review','examiner-vision',
   'posture-result','shoulder-icon','grip-ready','all-results'].includes(scenario)||directNavigation&&['home-first','home-review'].includes(scenario);
-const K=pagesRelease?'anovator-pages-demo-v01':(scenarioSession?'anovator-g01-v06-'+scenario:'anovator-g01-v05')+(directNavigation?'-direct':'');
+const K=pagesRelease?(directNavigation?'anovator-pages-demo-v01':'anovator-pages-demo-mo-v01'):
+ (scenarioSession?'anovator-g01-v06-'+scenario:'anovator-g01-v05')+(directNavigation?'-direct':'');
 const SF=ANOVATOR_SCREEN_TEST_FLOW,SUI=ANOVATOR_SCREEN_TEST_UI;
 const BODY=window.ANOVATOR_BODY_UI,ENTRY=window.ANOVATOR_ENTRY_UI;
 const POSTURE=window.ANOVATOR_POSTURE_UI;
@@ -25,7 +28,15 @@ let state=E.fresh(pagesRelease?'all':undefined),tab='experience',inspect='standb
 let projectDirectory=null,receiptScroll=0,homeRailScroll=0,lastHomeProject=null,restoredReading=null;
 let restorePreviewFocus=null;
 try{const saved=JSON.parse(sessionStorage.getItem(K));if(saved&&C.profiles.some(p=>p.id===saved.profileId))state=saved;}catch{}
-if(!pagesRelease){
+if(pagesRelease){
+ try{
+   const options=JSON.parse(sessionStorage.getItem(pagesModesKey));
+   if(options){
+     state.settings.demoBodyRequired=options.bodyRequired;
+     state.settings.demoBodySpeed=options.bodySpeed;
+   }
+ }catch{}
+}else{
  try{feedback=JSON.parse(localStorage.getItem(FEEDBACK_K)||'[]');}catch{}
  try{state.accounts=JSON.parse(localStorage.getItem(ACCOUNT_K)||'{}');}catch{storageWarning='本浏览器不能读取演示账号缓存；本次资料仍可使用，跨登录保存需重新验证。';}
 }
@@ -110,7 +121,7 @@ function directBodyCapture(){
  return directNavigation&&state.route==='measure/body'&&state.acq?.testId==='body';
 }
 function canFinishDemoCapture(){
- return pagesRelease&&directBodyCapture()&&!state.stop&&!state.privacyLocked&&H.usable(state)&&W.usable(state);
+ return pagesRelease&&state.route==='measure/body'&&state.acq?.testId==='body'&&!state.stop&&!state.privacyLocked&&H.usable(state)&&W.usable(state);
 }
 function demoRequirementLocked(){
  return !!(state.acq||state.stop||state.assessmentClosing||state.privacyLocked);
@@ -577,7 +588,8 @@ function hubLanding(){
    ?`<p class="hub-progress">Plan · <strong>${done} of ${chosen.length}</strong> complete</p>`
    :`<p class="hub-progress">Recommended · <strong>${done}/${chosen.length}</strong></p>`):'';
  const firstBody=!sessionRecord('body');
- const optionalTests=firstBody?'<p class="hub-optional">Other tests are optional</p>':'';
+ const bodyRequired=E.bodyRequired(state);
+ const optionalTests=firstBody&&bodyRequired?'<p class="hub-optional">Other tests are optional</p>':'';
  const callouts=homeProjects.filter(id=>E.allowed(state,id)).map(id=>{
    const fields=displayFields(id).slice(0,2);
    const nextLabel=next===id?(id==='body'?'First test':'Up next'):'';
@@ -587,12 +599,13 @@ function hubLanding(){
    const name=id==='body'?'Body<br>composition':esc(id==='posture'?'Posture':projectName(id));
    const record=sessionRecord(id);
    const canView=GN.taskLayer&&isRecorded(id);
-   const canPrepare=GN.taskLayer&&!record?.needsReview&&(ready?missing.includes(id):id==='body');
+   const bodySuggestion=!bodyRequired&&!chosen.length&&id==='body';
+   const canPrepare=GN.taskLayer&&!record?.needsReview&&(ready?missing.includes(id)||bodySuggestion:id==='body');
    const payload=esc(JSON.stringify({id}));
    const status=`<span class="hub-status">${esc(label)}</span>`;
    let heading=status+`<h2>${name}</h2>`;
    if(canPrepare&&!canView){
-     const action=ready?'prepare-planned-test':record?.partial?'fill-test':'open-test';
+     const action=ready&&!bodySuggestion?'prepare-planned-test':record?.partial?'fill-test':'open-test';
      const cue=record?.partial?'Finish test':label==='Skipped'?'Make up':'Prepare';
      heading=`<h2><button type="button" class="hub-title-button hub-prepare-title" data-action="${action}"
        data-payload="${payload}" aria-label="${esc(cue+' · '+projectName(id))}">
@@ -602,7 +615,7 @@ function hubLanding(){
    const pre=id==='posture'?'Alignment · Waist':fields.map(row=>esc(row.label)).join(' · ');
    let readings=`<p class="hub-fields">${pre}</p>`;
    if(values)readings=projectReadings(fields,true);
-   else if(id==='body'&&firstBody){
+   else if(id==='body'&&firstBody&&bodyRequired){
      readings=`<p class="hub-fields hub-first-outcome"><strong>${pre}</strong><span>Starts your report</span></p>`;
    }
    const openResults=canView?`<button type="button" class="hub-callout-open" data-action="preview-project"
@@ -1140,6 +1153,10 @@ function renderPagesDemo(){
  <section id="demo-controls" class="review-panel pages-demo-controls" lang="zh-CN" aria-labelledby="pages-demo-heading">
  <h2 id="pages-demo-heading">演示控制</h2>
  <div class="pages-demo-options">
+ <label>导航版本 <select data-demo-navigation ${state.acq||state.stop?'disabled':''}>
+ <option value="direct" ${directNavigation?'selected':''}>层级压缩版</option>
+ <option value="mo" ${directNavigation?'':'selected'}>MO 人体版</option>
+ </select></label>
  <label><input type="checkbox" data-action="demo-body-required" ${E.bodyRequired(state)?'checked':''} ${demoRequirementLocked()?'disabled':''}>体成分必测</label>
  <label>体成分进度 <select data-demo-body-speed><option value="1">原速</option><option value="4" ${fast?'selected':''}>4× 加速</option></select></label>
  ${canFinishDemoCapture()?b('跳过等待，查看结果','demo-finish-body',{},'small'):''}
@@ -1156,7 +1173,9 @@ function renderIssues(){return `<main class="full"><div class="eyebrow">REVIEW &
 function persist(){
  try{
    sessionStorage.setItem(K,JSON.stringify(pagesRelease?{...state,identityDraft:undefined}:state));
-   if(!pagesRelease){
+   if(pagesRelease){
+     sessionStorage.setItem(pagesModesKey,JSON.stringify({bodyRequired:E.bodyRequired(state),bodySpeed:state.settings.demoBodySpeed===4?4:1}));
+   }else{
      localStorage.setItem(FEEDBACK_K,JSON.stringify(feedback));
      localStorage.setItem(ACCOUNT_K,JSON.stringify(state.accounts||{}));
    }
@@ -1615,6 +1634,14 @@ document.addEventListener('keydown',event=>{
 });
 document.addEventListener('change',event=>{
  const el=event.target;
+ if(pagesRelease&&el.hasAttribute('data-demo-navigation')){
+   if(state.acq||state.stop||!['direct','mo'].includes(el.value))return;
+   persist();
+   const url=new URL(location.href);
+   url.searchParams.set('navigation',el.value);
+   location.assign(url.href);
+   return;
+ }
  if(pagesRelease&&el.hasAttribute('data-demo-body-speed')){
    state.settings.demoBodySpeed=el.value==='4'?4:1;
    demoDriver?.retimeBody?.();
